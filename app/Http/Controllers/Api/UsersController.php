@@ -6,12 +6,22 @@ use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserCreated;
+use App\Http\Resources\Users\UserCreated;
+use App\Http\Resources\Users\UserDetail;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Unique;
 
 class UsersController extends Controller
 {
+    
+    public function show(User $user)
+    {
+        try {
+            return new UserDetail($user);
+        } catch (Exception $ex) {
+            return response('error interno de servido.', 500);
+        }
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -19,6 +29,7 @@ class UsersController extends Controller
             'email' => 'required|unique:users|email',
             'password' => 'required|min:6|alpha_num',
             'repeatPassword' => 'required|same:password',
+
             'enable' => 'required|in:0,1',
         ]);
     

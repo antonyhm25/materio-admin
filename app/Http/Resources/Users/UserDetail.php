@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Users;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserCreated extends JsonResource
+class UserDetail extends JsonResource
 {
     public function toArray($request)
     {
