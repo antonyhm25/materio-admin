@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserCreated;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Unique;
 
 class UsersController extends Controller
 {
@@ -30,4 +32,30 @@ class UsersController extends Controller
             return response('error interno de servidor.', 500);
         }
     }
+
+    public function update(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => [
+                'required',
+                Rule::unique('users')->ignore($user->id), 
+                'email',
+            ], 
+            'enable' => 'required|in:0,1',
+        ]);
+    
+        try {
+            $user->fill($request->all());
+            $user->save();
+
+            return response(null, 204);
+        } catch (Exception $ex) {
+            return response('error interno de servidor.', 500);
+        }
+    }
+
 }
+
+
+
