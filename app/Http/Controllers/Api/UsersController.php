@@ -8,10 +8,33 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Users\UserCreated;
 use App\Http\Resources\Users\UserDetail;
+use App\Http\Resources\Users\UserPaginated;
 use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
 {
+    public function index(Request $request)
+    {
+        $request->validate([
+            'page' => 'required|integer',
+            'size' => 'required|integer',
+            'sortBy' => 'required|in:name,email,enable,created_at',
+            'order' => 'required|in:asc,desc',
+        ]);
+
+        try{
+            $search = $request->has('search') ? $request->search : null;
+
+            $query = User::query();
+
+            $query->orderBy($request->sortBy, $request->order)
+                ->search($search);
+
+            return new UserPaginated($query->paginate($request->size));
+        } catch (Exception $ex){
+            return response('error interno de servicio.', 500);
+        }
+    }
     
     public function show(User $user)
     {
