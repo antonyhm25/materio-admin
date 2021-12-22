@@ -55,6 +55,17 @@ class UsersController extends Controller
         }
     }
 
+    public function destroy(User $user)
+    {
+        try {
+            $user->delete();
+            
+            return response(null, 204);
+        } catch (Exception $ex) {
+            return response('error interno de servidor.', 500);
+        }
+    }
+
 }
 
 
