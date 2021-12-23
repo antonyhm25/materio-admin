@@ -70,7 +70,7 @@ class UsersController extends Controller
 
             $role = $request->has('role') ?
                 $request->role :
-                RolesType::AUTH;
+                RolesType::USER_MOBILE;
             
             $user->assignRole($role);
 
@@ -98,7 +98,7 @@ class UsersController extends Controller
         try {
             $user->fill($request->all());
 
-            $user->type = $request->role === RolesType::AUTH ? 'USER' : 'ADMIN';
+            $user->type = $request->role === RolesType::USER_MOBILE ? 'USER' : 'ADMIN';
             $user->save();
         
             $user->assignRole($request->role);

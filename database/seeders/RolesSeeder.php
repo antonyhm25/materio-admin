@@ -22,14 +22,14 @@ class RolesSeeder extends Seeder
         ]);
         
         Role::create([
-            'name' => RolesType::ADMIN,
-            'display' => trans('app.roles.admin'),
+            'name' => RolesType::ADMIN_RESTAURANT,
+            'display' => trans('app.roles.admin-resturant'),
             'locked' => 1,
         ]);
 
         Role::create([
-            'name' => RolesType::AUTH,
-            'display' => trans('app.roles.auth'),
+            'name' => RolesType::USER_MOBILE,
+            'display' => trans('app.roles.user-mobile'),
             'locked' => 1,
         ]);
     }

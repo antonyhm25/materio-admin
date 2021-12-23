@@ -17,8 +17,8 @@ class AssingPermissionsSeeder extends Seeder
     public function run()
     {
         $superAdmin = Role::findByName(RolesType::SUPER_ADMIN,);
-        $admin = Role::findByName(RolesType::ADMIN);
-        $auth = Role::findByName(RolesType::AUTH);
+        $adminRestaurant = Role::findByName(RolesType::ADMIN_RESTAURANT);
+        $userMobile = Role::findByName(RolesType::USER_MOBILE);
 
         $superAdmin->givePermissionTo(
             PermissionsType::PERMISSION_VIEW,
@@ -44,7 +44,7 @@ class AssingPermissionsSeeder extends Seeder
             PermissionsType::MEAL_DEALS_DELETE,
         );
 
-        $admin->givePermissionTo(
+        $adminRestaurant->givePermissionTo(
             PermissionsType::MEAL_DEALS_VIEW,
             PermissionsType::MEALS_CREATE_UPDATE,
             PermissionsType::MEALS_DELETE,
@@ -54,7 +54,7 @@ class AssingPermissionsSeeder extends Seeder
             PermissionsType::MEAL_DEALS_DELETE,
         );
 
-        $auth->givePermissionTo(
+        $userMobile->givePermissionTo(
             PermissionsType::MEAL_DEALS_VIEW,
             PermissionsType::MEAL_DEALS_STATUS,
         );

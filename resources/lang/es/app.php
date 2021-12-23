@@ -49,8 +49,8 @@ return [
 
     'roles' => [
         'super-admin' => 'Super Administrador',
-        'admin' => 'Administrador',
-        'auth' => 'Autenticado'
+        'admin-restaurant' => 'Administrador del Restaurante',
+        'user-mobile' => 'Usuario Móvil'
     ],
 
     'general' => [
