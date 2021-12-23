@@ -22,6 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/permissions', [PermissionsController::class, 'index']);
 
+Route::get('/roles', [RolesController::class, 'index']);
+Route::get('/roles/{role}', [RolesController::class, 'show']);
 Route::post('/roles', [RolesController::class, 'store']);
 Route::put('/roles/{role}', [RolesController::class, 'update']);
 Route::delete('/roles/{role}', [RolesController::class, 'destroy']);

@@ -8,10 +8,36 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Roles\RoleCreated;
+use App\Http\Resources\Roles\RoleDetail;
+use App\Http\Resources\Roles\RoleList;
 use Illuminate\Validation\Rule;
 
 class RolesController extends Controller
 {
+    public function index() 
+    {
+        try {
+            $query = Role::orderBy('name', 'asc');
+
+            return RoleList::collection($query->get());
+        } catch (Exception $ex) {
+            Log::error($ex);
+
+            return response(trans('app.general.error'), 500);
+        }
+    }
+
+    public function show(Role $role) 
+    {
+        try {
+            return new RoleDetail($role);
+        } catch (Exception $ex) {
+            Log::error($ex);
+
+            return response(trans('app.general.error'), 500);
+        }
+    }
+
     public function store(Request $request) 
     {
         $request->validate([
