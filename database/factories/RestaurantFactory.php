@@ -16,7 +16,7 @@ class RestaurantFactory extends Factory
         return [
             'name'=> $this->faker->unique->company(),
             'address'=> $this->faker->address(),
-            'photo'=> $this->faker->image(),
+            'photo'=> $this->faker->imageUrl(),
         ];
     }
 }
