@@ -50,7 +50,7 @@ return [
     'roles' => [
         'super-admin' => 'Super Administrador',
         'admin-restaurant' => 'Administrador del Restaurante',
-        'user-mobile' => 'Usuario Móvil'
+        'local' => 'Local'
     ],
 
     'general' => [

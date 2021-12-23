@@ -18,7 +18,7 @@ class AssingPermissionsSeeder extends Seeder
     {
         $superAdmin = Role::findByName(RolesType::SUPER_ADMIN,);
         $adminRestaurant = Role::findByName(RolesType::ADMIN_RESTAURANT);
-        $userMobile = Role::findByName(RolesType::USER_MOBILE);
+        $userMobile = Role::findByName(RolesType::LOCAL);
 
         $superAdmin->givePermissionTo(
             PermissionsType::PERMISSION_VIEW,
