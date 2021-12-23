@@ -37,4 +37,37 @@ class RolesController extends Controller
             return response(trans('app.general.error'), 500);
         }
     }
+
+    public function update(Request $request, Role $role) 
+    {
+        $request->validate([
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('roles')->ignore($role->id),
+                'alpha_dash'
+            ],
+            'display' => 'required|string',
+            'locked' => 'required|in:0,1',
+            'permissions' => 'required|array',
+        ]);
+
+        try {
+            $role->fill([
+                'name' => strtolower($request->name),
+                'display' => $request->display,
+                'locked' => $request->locked,
+            ]);
+
+            $role->save();
+
+            $role->givePermissionTo($request->permissions);
+
+            return response(null, 204);
+        } catch (Exception $ex) {
+            Log::error($ex);
+
+            return response(trans('app.general.error'), 500);
+        }
+    }
 }
