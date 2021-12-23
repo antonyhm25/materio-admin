@@ -51,5 +51,9 @@ return [
         'super-admin' => 'Super Administrator',
         'admin' => 'Administrator',
         'auth' => 'Authenticated'
-    ]
+    ],
+
+    'general' => [
+        'error' => 'internal server error, try again later.'
+    ],
 ];
