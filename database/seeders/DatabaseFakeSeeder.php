@@ -16,10 +16,6 @@ class DatabaseFakeSeeder extends Seeder
     public function run()
     {
         User::factory(100)
-            ->create()
-            ->each(function ($item) {
-                $item->restaurant()
-                    ->save(Restaurant::factory()->make());
-            });
+            ->create();
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
 use App\Helpers\PermissionsType;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\PermissionsController;
-use App\Http\Controllers\Api\RolesController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\RolesController;
 use App\Http\Controllers\Api\UsersController;
+use App\Http\Controllers\Api\PermissionsController;
+use App\Http\Controllers\Api\UserConsumersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,9 @@ use App\Http\Controllers\Api\UsersController;
 |
 */
 
-Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/login', [AuthController::class, 'loginAdmin']);
+
+Route::post('/auth/local/register', [UserConsumersController::class, 'store']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
@@ -37,4 +40,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/users', [UsersController::class, 'store'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);
     Route::put('/users/{user}', [UsersController::class, 'update'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);
     Route::delete('/users/{user}', [UsersController::class, 'destroy'])->middleware('permission:'. PermissionsType::USERS_DELETE);
+    
+    Route::post('/local/users', [UserConsumersController::class, 'store'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);
+    Route::put('/local/users/{user}', [UserConsumersController::class, 'update'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);
+    
+    Route::post('/restaurants/{restaurant}/photo', [UserConsumersController::class, 'uploadPhoto'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);
 });

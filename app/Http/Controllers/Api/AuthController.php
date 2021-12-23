@@ -12,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function login(Request $request) 
+    public function loginAdmin(Request $request) 
     {
         $request->validate([
             'email' => 'required|email',
@@ -20,7 +20,36 @@ class AuthController extends Controller
             'deviceName' => 'required',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)
+            ->where('enable', 1)
+            ->where('type', 'admin')
+            ->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => [trans('app.general.auth')],
+            ]);
+        }
+
+        $permissions = $user->getAllPermissions()->map(function ($item) {
+            return "{$item->name}";
+        });
+
+        return $user->createToken($request->deviceName, $permissions->toArray())->plainTextToken;
+    }
+
+    public function loginLocal(Request $request) 
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+            'deviceName' => 'required',
+        ]);
+
+        $user = User::where('email', $request->email)
+            ->where('enable', 1)
+            ->where('type', 'local')
+            ->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([

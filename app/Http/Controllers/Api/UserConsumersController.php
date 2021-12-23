@@ -4,55 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use Exception;
 use App\Models\User;
+use App\Helpers\RolesType;
+use App\Models\Restaurant;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Intervention\Image\Facades\Image;
 use App\Http\Resources\Users\UserPaginated;
-use App\Http\Resources\Users\UserResult;
+use App\Http\Resources\UserConsumers\UserConsumerResult;
 
-class UsersController extends Controller
+class UserConsumersController extends Controller
 {
-    public function index(Request $request)
-    {
-        $request->validate([
-            'page' => 'sometimes|required|integer',
-            'size' => 'sometimes|required|integer',
-            'sortBy' => 'sometimes|required|in:name,email,enable,created_at',
-            'order' => 'sometimes|required|in:asc,desc',
-            'search' => 'sometimes|required',
-        ]);
-
-        try{
-            $size = $request->size ?? 15;
-            $sortBy = $request->sortBy ?? 'name';
-            $order = $request->order ?? 'asc';
-            $search = $request->search ?? null;
-
-            $query = User::orderBy($sortBy, $order)
-                ->search($search)
-                ->paginate($size);
-
-            return new UserPaginated($query);
-        } catch (Exception $ex){
-            Log::error($ex);
-
-            return response(trans('app.general.error'), 500);
-        }
-    }
-    
-    public function show(User $user)
-    {
-        try {
-            return new UserResult($user);
-        } catch (Exception $ex) {
-            Log::error($ex);
-
-            return response(trans('app.general.error'), 500);
-        }
-    }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -61,7 +26,7 @@ class UsersController extends Controller
             'password' => 'required|min:6|alpha_num',
             'repeatPassword' => 'required|same:password',
             'enable' => 'required|in:0,1',
-            'role' => 'required|exists:roles,name',
+            'restaurant' => 'required|array:name,address'
         ]);
     
         try {
@@ -69,13 +34,19 @@ class UsersController extends Controller
 
             $user = new User($request->all());
             $user->password = bcrypt($request->password);
+            $user->type = 'local';
             $user->save();
             
-            $user->assignRole($request->role);
+            $user->restaurant()->create([
+                'name' => $request->restaurant['name'],
+                'address' => $request->restaurant['address']
+            ]);
+            
+            $user->assignRole(RolesType::LOCAL);
 
             DB::commit();
 
-            return new UserResult($user);
+            return new UserConsumerResult($user);
         } catch (Exception $ex) {
             Log::error($ex);
             DB::rollBack();
@@ -94,14 +65,17 @@ class UsersController extends Controller
                 'email',
             ], 
             'enable' => 'required|in:0,1',
-            'role' => 'required|exists:roles,name'
+            'restaurant' => 'required|array:name,address'
         ]);
     
         try {
             $user->fill($request->all());
             $user->save();
-        
-            $user->assignRole($request->role);
+
+            $restaurant = $user->restaurant;
+            $restaurant->name = $request->restaurant['name'];
+            $restaurant->address = $request->restaurant['address'];
+            $restaurant->save();
 
             return response(null, 204);
         } catch (Exception $ex) {
@@ -111,12 +85,31 @@ class UsersController extends Controller
         }
     }
 
-    public function destroy(User $user)
+    public function uploadPhoto(Request $request, Restaurant $restaurant) 
     {
+        $request->validate([
+            'photo' => 'required|image|mimes:jpg,jpeg,png,svg,gif|max:2048',
+        ]);
+
         try {
-            $user->delete();
+            $photo = $request->photo;
+            $fileName = Str::random() .".". $photo->getClientOriginalExtension();
             
-            return response(null, 204);
+            $filePath = storage_path('app/public/thumbnails');
+
+            $img = Image::make($photo->path());
+            $img->resize(400, 400, function ($const) {
+                $const->aspectRatio();
+            })
+            ->save("$filePath/$fileName");
+
+            $restaurant->photo = "thumbnails/$fileName";
+            $restaurant->save();
+
+            return response()->json([
+                'path' => "thumbnails/$fileName"
+            ]);
+
         } catch (Exception $ex) {
             Log::error($ex);
 

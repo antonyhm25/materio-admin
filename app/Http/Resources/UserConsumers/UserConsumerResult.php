@@ -1,19 +1,31 @@
 <?php
 
-namespace App\Http\Resources\Users;
+namespace App\Http\Resources\UserConsumers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResult extends JsonResource
+class UserConsumerResult extends JsonResource
 {
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     */
     public function toArray($request)
     {
-        $data = [
+        return [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
             'enable' => $this->enable,
             'createdAt' => $this->created_at,
+            'restaurant' => [
+                'id' => (int) $this->restaurant->id,
+                'name' => $this->restaurant->name,
+                'address' => $this->restaurant->address,
+                'createdAt' => $this->restaurant->created_at,
+            ],
             'role' => $this->getRoleNames()->first(),
             'permissions' => $this->getAllPermissions()->map(function ($item) {
                 return [
@@ -22,18 +34,7 @@ class UserResult extends JsonResource
                     'display' => $item->display,
                     'module' => $item->module,
                 ];
-            }),
+            })
         ];
-
-        if (!is_null($this->restaurant)) {
-            $data['restaurant'] = [
-                'id' => (int) $this->restaurant->id,
-                'photo' => $this->photo,
-                'address' => $this->restaurant->name,
-                'createdAt' => $this->restaurant->created_at,
-            ];
-        }
-
-        return $data;
     }
 }

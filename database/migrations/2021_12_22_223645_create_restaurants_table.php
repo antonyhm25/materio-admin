@@ -17,7 +17,7 @@ class CreateRestaurantsTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('address');
-            $table->string('photo', 100);
+            $table->string('photo', 100)->nullable();
             $table->bigInteger('user_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
