@@ -20,7 +20,6 @@ class UsersSeeder extends Seeder
             'name' => 'Super Admin',
             'email' => 'superadmin@domain.com',
             'password' => '$2y$10$yAE1YXJjlSOfb6fZz6RACO4WsuKGMVUc9Ow.am.kEtc/tfrZ1gNji', //secret
-            'type' => 'ADMIN'
         ]);
 
         $superAdmin->assignRole(RolesType::SUPER_ADMIN);

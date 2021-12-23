@@ -2,37 +2,38 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Helpers\RolesType;
 use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Users\UserDetail;
-use App\Http\Resources\Users\UserCreated;
 use App\Http\Resources\Users\UserPaginated;
+use App\Http\Resources\Users\UserResult;
 
 class UsersController extends Controller
 {
     public function index(Request $request)
     {
         $request->validate([
-            'page' => 'required|integer',
-            'size' => 'required|integer',
-            'sortBy' => 'required|in:name,email,enable,created_at',
-            'order' => 'required|in:asc,desc',
+            'size' => 'sometimes|required|integer',
+            'sortBy' => 'sometimes|required|in:name,email,enable,created_at',
+            'order' => 'sometimes|required|in:asc,desc',
+            'search' => 'sometimes|required',
         ]);
 
         try{
-            $search = $request->has('search') ? $request->search : null;
+            $size = $request->size ?? 15;
+            $sortBy = $request->sortBy ?? 'name';
+            $order = $request->order ?? 'asc';
+            $search = $request->search ?? null;
 
-            $query = User::query();
+            $query = User::orderBy($sortBy, $order)
+                ->search($search)
+                ->paginate($size);
 
-            $query->orderBy($request->sortBy, $request->order)
-                ->search($search);
-
-            return new UserPaginated($query->paginate($request->size));
+            return new UserPaginated($query);
         } catch (Exception $ex){
             Log::error($ex);
 
@@ -43,7 +44,7 @@ class UsersController extends Controller
     public function show(User $user)
     {
         try {
-            return new UserDetail($user);
+            return new UserResult($user);
         } catch (Exception $ex) {
             Log::error($ex);
 
@@ -59,24 +60,24 @@ class UsersController extends Controller
             'password' => 'required|min:6|alpha_num',
             'repeatPassword' => 'required|same:password',
             'enable' => 'required|in:0,1',
-            'role' => 'sometimes|required|exists:roles,name'
+            'role' => 'required|exists:roles,name',
         ]);
     
         try {
+            DB::beginTransaction();
+
             $user = new User($request->all());
             $user->password = bcrypt($request->password);
-            $user->type = $request->has('role') ? 'ADMIN' : 'USER';
             $user->save();
-
-            $role = $request->has('role') ?
-                $request->role :
-                RolesType::USER_MOBILE;
             
-            $user->assignRole($role);
+            $user->assignRole($request->role);
 
-            return new UserCreated($user);
+            DB::commit();
+
+            return new UserResult($user);
         } catch (Exception $ex) {
             Log::error($ex);
+            DB::rollBack();
 
             return response(trans('app.general.error'), 500);
         }
@@ -97,8 +98,6 @@ class UsersController extends Controller
     
         try {
             $user->fill($request->all());
-
-            $user->type = $request->role === RolesType::USER_MOBILE ? 'USER' : 'ADMIN';
             $user->save();
         
             $user->assignRole($request->role);
@@ -123,8 +122,4 @@ class UsersController extends Controller
             return response(trans('app.general.error'), 500);
         }
     }
-
 }
-
-
-
