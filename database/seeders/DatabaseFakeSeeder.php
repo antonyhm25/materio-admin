@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Restaurant;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -14,6 +15,11 @@ class DatabaseFakeSeeder extends Seeder
      */
     public function run()
     {
-       User::factory(100)->create();
+        User::factory(100)
+            ->create()
+            ->each(function ($item) {
+                $item->restaurant()
+                    ->save(Restaurant::factory()->make());
+            });
     }
 }

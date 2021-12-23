@@ -47,6 +47,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function restaurant()
+    {
+        return $this->hasOne(Restaurant::class);
+    }
+    
     public function scopeSearch(Builder $query, $search)
     {
         if (is_null($search)) {
