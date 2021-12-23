@@ -54,6 +54,8 @@ return [
     ],
 
     'general' => [
-        'error' => 'internal server error, try again later.'
+        'error' => 'internal server error, try again later.',
+        'auth' => 'The provided credentials are incorrect.',
+        'logout' => 'Session closed successfully.',
     ],
 ];
