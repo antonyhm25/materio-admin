@@ -14,6 +14,7 @@ class UserCreated extends JsonResource
             'email' => $this->email,
             'enable' => $this->enable,
             'createdAt' => $this->created_at,
+            'role' => $this->getRoleNames()->first()
         ];
     }
 }

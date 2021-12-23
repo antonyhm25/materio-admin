@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\RolesType;
 use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\Users\UserCreated;
-use App\Http\Resources\Users\UserDetail;
-use App\Http\Resources\Users\UserPaginated;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\Users\UserDetail;
+use App\Http\Resources\Users\UserCreated;
+use App\Http\Resources\Users\UserPaginated;
 
 class UsersController extends Controller
 {
@@ -32,7 +34,9 @@ class UsersController extends Controller
 
             return new UserPaginated($query->paginate($request->size));
         } catch (Exception $ex){
-            return response('error interno de servicio.', 500);
+            Log::error($ex);
+
+            return response(trans('app.general.error'), 500);
         }
     }
     
@@ -41,7 +45,9 @@ class UsersController extends Controller
         try {
             return new UserDetail($user);
         } catch (Exception $ex) {
-            return response('error interno de servido.', 500);
+            Log::error($ex);
+
+            return response(trans('app.general.error'), 500);
         }
     }
 
@@ -52,18 +58,27 @@ class UsersController extends Controller
             'email' => 'required|unique:users|email',
             'password' => 'required|min:6|alpha_num',
             'repeatPassword' => 'required|same:password',
-
             'enable' => 'required|in:0,1',
+            'role' => 'sometimes|required|exists:roles,name'
         ]);
     
         try {
             $user = new User($request->all());
             $user->password = bcrypt($request->password);
+            $user->type = $request->has('role') ? 'ADMIN' : 'USER';
             $user->save();
+
+            $role = $request->has('role') ?
+                $request->role :
+                RolesType::AUTH;
+            
+            $user->assignRole($role);
 
             return new UserCreated($user);
         } catch (Exception $ex) {
-            return response('error interno de servidor.', 500);
+            Log::error($ex);
+
+            return response(trans('app.general.error'), 500);
         }
     }
 
@@ -77,15 +92,22 @@ class UsersController extends Controller
                 'email',
             ], 
             'enable' => 'required|in:0,1',
+            'role' => 'required|exists:roles,name'
         ]);
     
         try {
             $user->fill($request->all());
+
+            $user->type = $request->role === RolesType::AUTH ? 'USER' : 'ADMIN';
             $user->save();
+        
+            $user->assignRole($request->role);
 
             return response(null, 204);
         } catch (Exception $ex) {
-            return response('error interno de servidor.', 500);
+            Log::error($ex);
+
+            return response(trans('app.general.error'), 500);
         }
     }
 
@@ -96,7 +118,9 @@ class UsersController extends Controller
             
             return response(null, 204);
         } catch (Exception $ex) {
-            return response('error interno de servidor.', 500);
+            Log::error($ex);
+
+            return response(trans('app.general.error'), 500);
         }
     }
 
