@@ -1,9 +1,9 @@
 <?php
 
+use App\Helpers\PermissionsType;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PermissionsController;
 use App\Http\Controllers\Api\RolesController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UsersController;
 
@@ -24,17 +24,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 
-    Route::get('/permissions', [PermissionsController::class, 'index']);
+    Route::get('/permissions', [PermissionsController::class, 'index'])->middleware('permission:'. PermissionsType::PERMISSION_VIEW);
 
-    Route::get('/roles', [RolesController::class, 'index']);
-    Route::get('/roles/{role}', [RolesController::class, 'show']);
-    Route::post('/roles', [RolesController::class, 'store']);
-    Route::put('/roles/{role}', [RolesController::class, 'update']);
-    Route::delete('/roles/{role}', [RolesController::class, 'destroy']);
+    Route::get('/roles', [RolesController::class, 'index'])->middleware('permission:'. PermissionsType::ROLES_VIEW);
+    Route::get('/roles/{role}', [RolesController::class, 'show'])->middleware('permission:'. PermissionsType::ROLES_VIEW);
+    Route::post('/roles', [RolesController::class, 'store'])->middleware('permission:'. PermissionsType::ROLES_CREATE_UPDATE);
+    Route::put('/roles/{role}', [RolesController::class, 'update'])->middleware('permission:'. PermissionsType::ROLES_CREATE_UPDATE);
+    Route::delete('/roles/{role}', [RolesController::class, 'destroy'])->middleware('permission:'. PermissionsType::ROLES_DELETE);
 
-    Route::get('/users', [UsersController::class, 'index']);
-    Route::get('/users/{user}', [UsersController::class, 'show']);
-    Route::post('/users', [UsersController::class, 'store']);
-    Route::put('/users/{user}', [UsersController::class, 'update']);
-    Route::delete('/users/{user}', [UsersController::class, 'destroy']);
+    Route::get('/users', [UsersController::class, 'index'])->middleware('permission:'. PermissionsType::USERS_VIEW);
+    Route::get('/users/{user}', [UsersController::class, 'show'])->middleware('permission:'. PermissionsType::USERS_VIEW);
+    Route::post('/users', [UsersController::class, 'store'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);
+    Route::put('/users/{user}', [UsersController::class, 'update'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);
+    Route::delete('/users/{user}', [UsersController::class, 'destroy'])->middleware('permission:'. PermissionsType::USERS_DELETE);
 });
