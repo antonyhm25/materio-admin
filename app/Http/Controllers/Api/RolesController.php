@@ -70,4 +70,17 @@ class RolesController extends Controller
             return response(trans('app.general.error'), 500);
         }
     }
+
+    public function destroy(Role $role) 
+    {
+        try {
+            $role->delete();
+
+            return response(null, 204);
+        } catch (Exception $ex) {
+            Log::error($ex);
+
+            return response(trans('app.general.error'), 500);
+        }
+    }
 }
