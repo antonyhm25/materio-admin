@@ -51,6 +51,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(Restaurant::class);
     }
+
+    public function mealDeals() 
+    {
+        return $this->hasMany(MealDeal::class);
+    }
     
     public function scopeSearch(Builder $query, $search)
     {

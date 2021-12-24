@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/users/{user}', [UsersController::class, 'update'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);
     Route::delete('/users/{user}', [UsersController::class, 'destroy'])->middleware('permission:'. PermissionsType::USERS_DELETE);
 
+    Route::get('/users/{user}/local/meal-deals', [UserMobilesController::class, 'mealDeals']);
     Route::put('/users/{user}/local', [UserMobilesController::class, 'update']);
     
     Route::post('/restaurants', [RestaurantsController::class, 'store'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);

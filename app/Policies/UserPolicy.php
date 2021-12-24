@@ -18,7 +18,9 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        if ($user->tokenCan(PermissionsType::MEAL_DEALS_VIEW)) {
+            return true;
+        }
     }
 
     /**
