@@ -18,6 +18,11 @@ class AddConstraintMealDealsTable extends Migration
                 ->on('meals')
                 ->references('id')
                 ->onDelete('cascade');
+
+            $table->foreign('user_id')
+                ->on('users')
+                ->references('id')
+                ->onDelete('cascade');
         });
     }
 
@@ -30,6 +35,7 @@ class AddConstraintMealDealsTable extends Migration
     {
         Schema::table('meal_deals', function (Blueprint $table) {
             $table->dropForeign('meal_deals_meal_id_foreign');
+            $table->dropForeign('meal_deals_user_id_foreign');
         });
     }
 }

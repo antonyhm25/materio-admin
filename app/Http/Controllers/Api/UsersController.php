@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\RolesType;
 use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,6 +17,8 @@ class UsersController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('viewAny', User::class);
+
         $request->validate([
             'page' => 'sometimes|required|integer',
             'size' => 'sometimes|required|integer',
@@ -44,6 +47,8 @@ class UsersController extends Controller
     
     public function show(User $user)
     {
+        $this->authorize('view', $user);
+
         try {
             return new UserResult($user);
         } catch (Exception $ex) {
@@ -55,13 +60,14 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', User::class);
+
         $request->validate([
             'name' => 'required',
             'email' => 'required|unique:users|email',
             'password' => 'required|min:6|alpha_num',
             'repeatPassword' => 'required|same:password',
             'enable' => 'required|in:0,1',
-            'role' => 'required|exists:roles,name',
         ]);
     
         try {
@@ -71,7 +77,7 @@ class UsersController extends Controller
             $user->password = bcrypt($request->password);
             $user->save();
             
-            $user->assignRole($request->role);
+            $user->assignRole(RolesType::SUPER_ADMIN);
 
             DB::commit();
 
@@ -86,6 +92,8 @@ class UsersController extends Controller
 
     public function update(Request $request, User $user)
     {
+        $this->authorize('update', $user);
+
         $request->validate([
             'name' => 'required',
             'email' => [
@@ -94,14 +102,11 @@ class UsersController extends Controller
                 'email',
             ], 
             'enable' => 'required|in:0,1',
-            'role' => 'required|exists:roles,name'
         ]);
     
         try {
             $user->fill($request->all());
             $user->save();
-        
-            $user->assignRole($request->role);
 
             return response(null, 204);
         } catch (Exception $ex) {
@@ -113,6 +118,8 @@ class UsersController extends Controller
 
     public function destroy(User $user)
     {
+        $this->authorize('delete', $user);
+
         try {
             $user->delete();
             

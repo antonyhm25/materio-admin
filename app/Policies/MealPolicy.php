@@ -4,11 +4,13 @@ namespace App\Policies;
 
 use App\Helpers\PermissionsType;
 use App\Helpers\RolesType;
+use App\Models\Meal;
+use App\Models\Restaurant;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class UserPolicy
+class MealPolicy
 {
     use HandlesAuthorization;
 
@@ -20,26 +22,29 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->tokenCan(PermissionsType::MEAL_DEALS_VIEW)) {
-            return true;
-        }
-
-        if ($user->tokenCan(PermissionsType::USERS_VIEW)) {
-            return true;
-        }
+       //
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Meal  $meal
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, User $model)
+    public function view(User $user, Meal $meal)
     {
-        if ($user->tokenCan(PermissionsType::USERS_VIEW)) {
-            return true;
+        if ($user->tokenCan(PermissionsType::MEALS_VIEW)) {
+            if ($user->hasRole(RolesType::SUPER_ADMIN)) {
+                return true;
+            }
+        
+            if (!is_null($user->restaurant)) {
+                dd($user->restaurant->id);
+                return $user->restaurant->id === $meal->restaurant_id
+                    ? Response::allow()
+                    : Response::deny('app.general.owner');
+            }
         }
     }
 
@@ -51,28 +56,24 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        if ($user->tokenCan(PermissionsType::USERS_CREATE_UPDATE)) {
-            return true;
-        }
+        //
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Meal  $meal
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, User $model)
+    public function update(User $user, Meal $meal)
     {
-        if ($user->tokenCan(PermissionsType::ACCOUNT_UPDATE)) {
-            return $user->id === $model->id
-                ? Response::allow()
-                : Response::deny(trans('app.users.owner'));
-        }
-
-        if ($user->tokenCan(PermissionsType::USERS_CREATE_UPDATE)) {
-            return true;
+        if ($user->tokenCan(PermissionsType::MEALS_CREATE_UPDATE)) {
+            if (!is_null($user->restaurant)) {
+                return $user->restaurant->id === $meal->restaurant_id
+                    ? Response::allow()
+                    : Response::deny('app.general.owner');
+            }
         }
     }
 
@@ -80,13 +81,17 @@ class UserPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Meal  $meal
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, User $model)
+    public function delete(User $user, Meal $meal)
     {
-        if ($user->tokenCan(PermissionsType::USERS_DELETE)) {
-            return true;
+        if ($user->tokenCan(PermissionsType::MEALS_CREATE_UPDATE)) {
+            if (!is_null($user->restaurant)) {
+                return $user->restaurant->id === $meal->restaurant_id
+                    ? Response::allow()
+                    : Response::deny('app.general.owner');
+            }
         }
     }
 
@@ -94,10 +99,10 @@ class UserPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Meal  $meal
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, User $model)
+    public function restore(User $user, Meal $meal)
     {
         //
     }
@@ -106,10 +111,10 @@ class UserPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Meal  $meal
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, User $model)
+    public function forceDelete(User $user, Meal $meal)
     {
         //
     }

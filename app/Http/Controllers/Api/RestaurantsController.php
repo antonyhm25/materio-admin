@@ -20,6 +20,8 @@ class RestaurantsController extends Controller
 {
     public function store(Request $request)
     {
+        $this->authorize('create', User::class);
+
         $request->validate([
             'name' => 'required',
             'email' => 'required|unique:users|email',
@@ -57,6 +59,8 @@ class RestaurantsController extends Controller
 
     public function update(Request $request, User $user)
     {
+        $this->authorize('update', $user);
+        
         $request->validate([
             'name' => 'required',
             'email' => [
@@ -87,6 +91,8 @@ class RestaurantsController extends Controller
 
     public function uploadPhoto(Request $request, Restaurant $restaurant) 
     {
+        $this->authorize('update', $restaurant->user);
+        
         $request->validate([
             'photo' => 'required|image|mimes:jpg,jpeg,png,svg,gif|max:2048',
         ]);

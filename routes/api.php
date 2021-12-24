@@ -31,38 +31,40 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 
-    Route::get('/permissions', [PermissionsController::class, 'index'])->middleware('permission:'. PermissionsType::PERMISSION_VIEW);
+    Route::get('/permissions', [PermissionsController::class, 'index']);
 
-    Route::get('/roles', [RolesController::class, 'index'])->middleware('permission:'. PermissionsType::ROLES_VIEW);
-    Route::get('/roles/{role}', [RolesController::class, 'show'])->middleware('permission:'. PermissionsType::ROLES_VIEW);
-    Route::post('/roles', [RolesController::class, 'store'])->middleware('permission:'. PermissionsType::ROLES_CREATE_UPDATE);
-    Route::put('/roles/{role}', [RolesController::class, 'update'])->middleware('permission:'. PermissionsType::ROLES_CREATE_UPDATE);
-    Route::delete('/roles/{role}', [RolesController::class, 'destroy'])->middleware('permission:'. PermissionsType::ROLES_DELETE);
+    Route::get('/roles', [RolesController::class, 'index']);
+    Route::get('/roles/{role}', [RolesController::class, 'show']);
+    Route::post('/roles', [RolesController::class, 'store']);
+    Route::put('/roles/{role}', [RolesController::class, 'update']);
+    Route::delete('/roles/{role}', [RolesController::class, 'destroy']);
 
-    Route::get('/users', [UsersController::class, 'index'])->middleware('permission:'. PermissionsType::USERS_VIEW);
-    Route::get('/users/{user}', [UsersController::class, 'show'])->middleware('permission:'. PermissionsType::USERS_VIEW);
-    Route::post('/users', [UsersController::class, 'store'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);
-    Route::put('/users/{user}', [UsersController::class, 'update'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);
-    Route::delete('/users/{user}', [UsersController::class, 'destroy'])->middleware('permission:'. PermissionsType::USERS_DELETE);
+    Route::get('/users', [UsersController::class, 'index']);
+    Route::get('/users/{user}', [UsersController::class, 'show']);
+    Route::post('/users', [UsersController::class, 'store']);
+    Route::put('/users/{user}', [UsersController::class, 'update']);
+    Route::delete('/users/{user}', [UsersController::class, 'destroy']);
 
     Route::get('/users/{user}/local/meal-deals', [UserMobilesController::class, 'mealDeals']);
     Route::put('/users/{user}/local', [UserMobilesController::class, 'update']);
     
-    Route::post('/restaurants', [RestaurantsController::class, 'store'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);
-    Route::put('/restaurants/{user}', [RestaurantsController::class, 'update'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);
-    Route::post('/restaurants/{restaurant}/photo', [RestaurantsController::class, 'uploadPhoto'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);
+    Route::post('/restaurants', [RestaurantsController::class, 'store']);
+    Route::put('/restaurants/{user}', [RestaurantsController::class, 'update']);
+    Route::post('/restaurants/{restaurant}/photo', [RestaurantsController::class, 'uploadPhoto']);
 
-    Route::get('/meals', [MealsController::class, 'index'])->middleware('permission:'. PermissionsType::MEALS_VIEW);
-    Route::get('/meals/{meal}', [MealsController::class, 'show'])->middleware('permission:'. PermissionsType::MEALS_VIEW);
-    Route::post('/meals', [MealsController::class, 'store'])->middleware('permission:'. PermissionsType::MEALS_CREATE_UPDATE);
-    Route::post('/meals/{meal}/photo', [MealsController::class, 'uploadPhoto'])->middleware('permission:'. PermissionsType::MEALS_CREATE_UPDATE);
-    Route::put('/meals/{meal}', [MealsController::class, 'update'])->middleware('permission:'. PermissionsType::MEALS_CREATE_UPDATE);
-    Route::delete('/meals/{meal}', [MealsController::class, 'destroy'])->middleware('permission:'. PermissionsType::MEALS_DELETE);
+    Route::get('/restaurants/{restaurant}/meals', [MealsController::class, 'index']);
+    Route::get('/restaurants/{restaurant}/meals/{meal}', [MealsController::class, 'show']);
+    Route::post('/restaurants/{restaurant}/meals', [MealsController::class, 'store']);
+    Route::post('/restaurants/{restaurant}/meals/{meal}/photo', [MealsController::class, 'uploadPhoto']);
+    Route::put('/restaurants/{restaurant}/meals/{meal}', [MealsController::class, 'update']);
+    Route::delete('/restaurants/{restaurant}/meals/{meal}', [MealsController::class, 'destroy']);
     
-    Route::get('/meal-deals', [MealDealsController::class, 'index'])->middleware('permission:'. PermissionsType::MEAL_DEALS_VIEW);
-    Route::get('/meal-deals/{meal}', [MealDealsController::class, 'show'])->middleware('permission:'. PermissionsType::MEAL_DEALS_VIEW);
-    Route::post('/meal-deals', [MealDealsController::class, 'store'])->middleware('permission:'. PermissionsType::MEAL_DEALS_CREATE_UPDATE);
-    Route::put('/meal-deals/{meal}', [MealDealsController::class, 'update'])->middleware('permission:'. PermissionsType::MEAL_DEALS_CREATE_UPDATE);
+    Route::get('/restaurants/{restaurant}/meal-deals', [MealDealsController::class, 'index']);
+    Route::get('/restaurants/{restaurant}/meal-deals/{meal}', [MealDealsController::class, 'show']);
+    Route::post('/restaurants/{restaurant}/meal-deals', [MealDealsController::class, 'store']);
+    Route::put('/restaurants/{restaurant}/meal-deals/{meal}', [MealDealsController::class, 'update']);
+    Route::delete('/restaurants/{restaurant}/meal-deals/{meal}', [MealDealsController::class, 'destroy']);
+
+    Route::get('/meal-deals', [MealDealsController::class, 'mealDeals']);
     Route::put('/meal-deals/{meal}/reserved', [MealDealsController::class, 'reserved'])->middleware('permission:'. PermissionsType::MEAL_DEALS_STATUS);
-    Route::delete('/meal-deals/{meal}', [MealDealsController::class, 'destroy'])->middleware('permission:'. PermissionsType::MEAL_DEALS_DELETE);
 });

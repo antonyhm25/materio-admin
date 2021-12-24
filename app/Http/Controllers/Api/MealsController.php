@@ -12,19 +12,21 @@ use App\Http\Controllers\Controller;
 use Intervention\Image\Facades\Image;
 use App\Http\Resources\Meals\MealResult;
 use App\Http\Resources\Meals\MealPaginated;
+use App\Models\Restaurant;
 use Illuminate\Support\Facades\Storage;
 
 class MealsController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, Restaurant $restaurant)
     {
+        $this->authorize('view', $restaurant);
+
         $request->validate([
             'page' => 'sometimes|required|integer',
             'size' => 'sometimes|required|integer',
             'sortBy' => 'sometimes|required|in:name,description,created_at',
             'order' => 'sometimes|required|in:asc,desc',
             'search' => 'sometimes|required',
-            'restaurant' => 'sometimes|required|integer',
         ]);
 
         try{
@@ -32,11 +34,10 @@ class MealsController extends Controller
             $sortBy = $request->sortBy ?? 'name';
             $order = $request->order ?? 'asc';
             $search = $request->search ?? null;
-            $restaurant = $request->restaurant ?? null;
-
+            
             $query = Meal::orderBy($sortBy, $order)
                 ->search($search)
-                ->byRestaurant($restaurant)
+                ->byRestaurant($restaurant->id)
                 ->paginate($size);
 
             return new MealPaginated($query);
@@ -47,8 +48,11 @@ class MealsController extends Controller
         }
     }
 
-    public function show(Meal $meal)
+    public function show(Restaurant $restaurant,  Meal $meal)
     {
+        $this->authorize('view', $restaurant);
+        $this->authorize('view', $meal);
+
         try {
             return new MealResult($meal);
         } catch (Exception $ex) {
@@ -58,8 +62,10 @@ class MealsController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Restaurant $restaurant)
     {
+        $this->authorize('create', $restaurant);
+
         $request->validate([
             'name' => [
                 'required',
@@ -87,8 +93,10 @@ class MealsController extends Controller
         }
     }
 
-    public function update(Request $request, Meal $meal)
+    public function update(Request $request, Restaurant $restaurant, Meal $meal)
     {
+        $this->authorize('update', [$restaurant, $meal]);
+
         $request->validate([
             'name' => [
                 'required',
@@ -115,8 +123,11 @@ class MealsController extends Controller
         }
     }
 
-    public function destroy(Meal $meal) 
+    public function destroy(Restaurant $restaurant, Meal $meal) 
     {
+        $this->authorize('view', $restaurant);
+        $this->authorize('delete', $meal);
+
         try {
             $meal->delete();
 
@@ -128,8 +139,11 @@ class MealsController extends Controller
         }
     }
 
-    public function uploadPhoto(Request $request, Meal $meal) 
+    public function uploadPhoto(Request $request, Restaurant $restaurant, Meal $meal) 
     {
+        $this->authorize('view', $restaurant);
+        $this->authorize('update', $meal);
+
         $request->validate([
             'photo' => 'required|image|mimes:jpg,jpeg,png,svg,gif|max:2048',
         ]);

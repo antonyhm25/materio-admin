@@ -2,15 +2,14 @@
 
 namespace App\Policies;
 
-use App\Models\User;
-use App\Models\MealDeal;
-use App\Helpers\RolesType;
 use App\Helpers\PermissionsType;
+use App\Helpers\RolesType;
 use App\Models\Restaurant;
-use Illuminate\Auth\Access\Response;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
-class MealDealPolicy
+class RestaurantPolicy
 {
     use HandlesAuthorization;
 
@@ -22,27 +21,25 @@ class MealDealPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->tokenCan(PermissionsType::MEAL_DEALS_VIEW)) {
-            if ($user->hasRole(RolesType::SUPER_ADMIN)) {
-                return true;
-            }
-        }
-
-        return Response::deny(trans('app.general.forbidden'));
+        //
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\MealDeal  $mealDeal
+     * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, MealDeal $mealDeal)
+    public function view(User $user, Restaurant $restaurant)
     {
-        if ($user->tokenCan(PermissionsType::MEAL_DEALS_VIEW)) {
+        if ($user->tokenCan(PermissionsType::MEALS_VIEW)) {
+            if ($user->hasRole(RolesType::SUPER_ADMIN)) {
+                return true;
+            }
+
             if (!is_null($user->restaurant)) {
-                return $user->restaurant->id === $mealDeal->meal->restaurant_id
+                return $user->restaurant->id === $restaurant->id
                     ? Response::allow()
                     : Response::deny(trans('app.general.owner'));
             }
@@ -59,63 +56,59 @@ class MealDealPolicy
      */
     public function create(User $user, Restaurant $restaurant)
     {
-        // 
+        if ($user->tokenCan(PermissionsType::MEALS_CREATE_UPDATE)) {
+            if (!is_null($user->restaurant)) {
+                return $user->restaurant->id === $restaurant->id
+                    ? Response::allow()
+                    : Response::deny(trans('app.general.owner'));
+            }
+        }
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\MealDeal  $mealDeal
+     * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, MealDeal $mealDeal)
+    public function update(User $user, Restaurant $restaurant)
     {
-        if ($user->tokenCan(PermissionsType::MEAL_DEALS_STATUS)) {
-            return is_null($mealDeal->user_id)
-                ? Response::allow()
-                : Response::deny(trans('app.meal-deals.taken'));
-        }
-
-        if ($user->tokenCan(PermissionsType::MEAL_DEALS_CREATE_UPDATE)) {
+        if ($user->tokenCan(PermissionsType::MEALS_CREATE_UPDATE)) {
             if (!is_null($user->restaurant)) {
-                return $user->restaurant->id === $mealDeal->meal->restaurant_id
+                return $user->restaurant->id === $restaurant->id
                     ? Response::allow()
                     : Response::deny(trans('app.general.owner'));
             }
         }
-
-        return Response::deny(trans('app.general.forbidden'));
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\MealDeal  $mealDeal
+     * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, MealDeal $mealDeal)
+    public function delete(User $user, Restaurant $restaurant)
     {
-        if ($user->tokenCan(PermissionsType::MEAL_DEALS_DELETE)) {
+        if ($user->tokenCan(PermissionsType::MEALS_CREATE_UPDATE)) {
             if (!is_null($user->restaurant)) {
-                return $user->restaurant->id === $mealDeal->meal->restaurant_id
+                return $user->restaurant->id === $restaurant->id
                     ? Response::allow()
                     : Response::deny(trans('app.general.owner'));
             }
         }
-
-        return Response::deny(trans('app.general.forbidden'));
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\MealDeal  $mealDeal
+     * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, MealDeal $mealDeal)
+    public function restore(User $user, Restaurant $restaurant)
     {
         //
     }
@@ -124,10 +117,10 @@ class MealDealPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\MealDeal  $mealDeal
+     * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, MealDeal $mealDeal)
+    public function forceDelete(User $user, Restaurant $restaurant)
     {
         //
     }

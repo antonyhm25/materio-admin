@@ -3,12 +3,11 @@
 namespace App\Policies;
 
 use App\Helpers\PermissionsType;
-use App\Helpers\RolesType;
 use App\Models\User;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Auth\Access\Response;
 
-class UserPolicy
+class PermissionPolicy
 {
     use HandlesAuthorization;
 
@@ -20,11 +19,7 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->tokenCan(PermissionsType::MEAL_DEALS_VIEW)) {
-            return true;
-        }
-
-        if ($user->tokenCan(PermissionsType::USERS_VIEW)) {
+        if ($user->tokenCan(PermissionsType::PERMISSION_VIEW)) {
             return true;
         }
     }
@@ -33,14 +28,12 @@ class UserPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Permission  $permission
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, User $model)
+    public function view(User $user, Permission $permission)
     {
-        if ($user->tokenCan(PermissionsType::USERS_VIEW)) {
-            return true;
-        }
+        //
     }
 
     /**
@@ -51,53 +44,41 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        if ($user->tokenCan(PermissionsType::USERS_CREATE_UPDATE)) {
-            return true;
-        }
+        //
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Permission  $permission
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, User $model)
+    public function update(User $user, Permission $permission)
     {
-        if ($user->tokenCan(PermissionsType::ACCOUNT_UPDATE)) {
-            return $user->id === $model->id
-                ? Response::allow()
-                : Response::deny(trans('app.users.owner'));
-        }
-
-        if ($user->tokenCan(PermissionsType::USERS_CREATE_UPDATE)) {
-            return true;
-        }
+        //
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Permission  $permission
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, User $model)
+    public function delete(User $user, Permission $permission)
     {
-        if ($user->tokenCan(PermissionsType::USERS_DELETE)) {
-            return true;
-        }
+        //
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Permission  $permission
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, User $model)
+    public function restore(User $user, Permission $permission)
     {
         //
     }
@@ -106,10 +87,10 @@ class UserPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Permission  $permission
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, User $model)
+    public function forceDelete(User $user, Permission $permission)
     {
         //
     }

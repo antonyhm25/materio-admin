@@ -16,6 +16,8 @@ class RolesController extends Controller
 {
     public function index() 
     {
+        $this->authorize('viewAny', Role::class);
+
         try {
             $query = Role::orderBy('name', 'asc');
 
@@ -29,6 +31,8 @@ class RolesController extends Controller
 
     public function show(Role $role) 
     {
+        $this->authorize('view', $role);
+
         try {
             return new RoleDetail($role);
         } catch (Exception $ex) {
@@ -40,6 +44,8 @@ class RolesController extends Controller
 
     public function store(Request $request) 
     {
+        $this->authorize('create', Role::class);
+
         $request->validate([
             'name' => 'required|string|unique:roles|alpha_dash',
             'display' => 'required|string',
@@ -52,6 +58,7 @@ class RolesController extends Controller
                 'name' => strtolower($request->name),
                 'display' => $request->display,
                 'locked' => $request->locked,
+                'guard_name' => 'web'
             ]);
 
             $role->givePermissionTo($request->permissions);
@@ -66,6 +73,8 @@ class RolesController extends Controller
 
     public function update(Request $request, Role $role) 
     {
+        $this->authorize('update', $role);
+
         $request->validate([
             'name' => [
                 'required',
@@ -99,6 +108,8 @@ class RolesController extends Controller
 
     public function destroy(Role $role) 
     {
+        $this->authorize('delete', $role);
+
         try {
             $role->delete();
 

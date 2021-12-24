@@ -61,10 +61,15 @@ return [
         'error' => 'internal server error, try again later.',
         'auth' => 'The provided credentials are incorrect.',
         'logout' => 'Session closed successfully.',
+        'owner' => 'You are not owner of information',
+        'forbidden' => 'his action is unauthorized.',
     ],
 
     'meal-deals' => [
         'taken' => 'This meal deal has been taken',
-        'owner' => 'This meal deal does not belong to you'
+    ],
+
+    'roles' => [
+        'locked' => 'The role is locked'
     ],
 ];

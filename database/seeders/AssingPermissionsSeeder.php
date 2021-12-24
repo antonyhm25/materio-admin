@@ -35,12 +35,8 @@ class AssingPermissionsSeeder extends Seeder
             PermissionsType::RESTAURANTS_CREATE_UPDATE,
             
             PermissionsType::MEALS_VIEW,
-            PermissionsType::MEALS_CREATE_UPDATE,
-            PermissionsType::MEALS_DELETE,
 
             PermissionsType::MEAL_DEALS_VIEW,
-            PermissionsType::MEAL_DEALS_CREATE_UPDATE,
-            PermissionsType::MEAL_DEALS_DELETE,
         );
 
         $adminRestaurant->givePermissionTo(

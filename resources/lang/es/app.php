@@ -61,10 +61,15 @@ return [
         'error' => 'internal server error, try again later.',
         'auth' => 'Las credenciales proporcionadas son incorrectas.',
         'logout' => 'La sesión se cerró correctamente.',
+        'owner' => 'No eres dueño de la información',
+        'forbidden' => 'su acción no está autorizada.',
     ],
 
     'meal-deals' => [
-        'taken' => 'Esta oferta de comida ha sido aceptada',
-        'owner' => 'Esta oferta de comida no te pertenece'
+        'taken' => 'Esta oferta de comida ha sido tomada',
+    ],
+
+    'roles' => [
+        'locked' => 'El rol está bloqueado'
     ],
 ];
