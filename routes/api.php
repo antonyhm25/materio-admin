@@ -3,6 +3,7 @@
 use App\Helpers\PermissionsType;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\MealsController;
 use App\Http\Controllers\Api\RolesController;
 use App\Http\Controllers\Api\UsersController;
 use App\Http\Controllers\Api\PermissionsController;
@@ -45,4 +46,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/local/users/{user}', [UserConsumersController::class, 'update'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);
     
     Route::post('/restaurants/{restaurant}/photo', [UserConsumersController::class, 'uploadPhoto'])->middleware('permission:'. PermissionsType::USERS_CREATE_UPDATE);
+
+    Route::get('/meals', [MealsController::class, 'index'])->middleware('permission:'. PermissionsType::MEALS_VIEW);
+    Route::get('/meals/{meal}', [MealsController::class, 'show'])->middleware('permission:'. PermissionsType::MEALS_VIEW);
+    Route::post('/meals', [MealsController::class, 'store'])->middleware('permission:'. PermissionsType::MEALS_CREATE_UPDATE);
+    Route::post('/meals/{meal}/photo', [MealsController::class, 'uploadPhoto'])->middleware('permission:'. PermissionsType::MEALS_CREATE_UPDATE);
+    Route::put('/meals/{meal}', [MealsController::class, 'update'])->middleware('permission:'. PermissionsType::MEALS_CREATE_UPDATE);
+    Route::delete('/meals/{meal}', [MealsController::class, 'destroy'])->middleware('permission:'. PermissionsType::MEALS_DELETE);
 });

@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class RestaurantFactory extends Factory
+class MealFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -13,9 +13,11 @@ class RestaurantFactory extends Factory
      */
     public function definition()
     {
+        $this->faker->addProvider(new \FakerRestaurant\Provider\en_US\Restaurant($this->faker));
+
         return [
-            'name'=> $this->faker->unique->company(),
-            'address'=> $this->faker->address(),
+            'name' => $this->faker->foodName(),
+            'description' => $this->faker->paragraph()
         ];
     }
 }

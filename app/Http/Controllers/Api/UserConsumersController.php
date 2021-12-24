@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\Users\UserPaginated;
 use App\Http\Resources\UserConsumers\UserConsumerResult;
 
@@ -95,19 +96,25 @@ class UserConsumersController extends Controller
             $photo = $request->photo;
             $fileName = Str::random() .".". $photo->getClientOriginalExtension();
             
-            $filePath = storage_path('app/public/thumbnails');
+            $filePath = storage_path('app/public/thumbnails/restaurants');
 
             $img = Image::make($photo->path());
             $img->resize(400, 400, function ($const) {
                 $const->aspectRatio();
             })
             ->save("$filePath/$fileName");
+            
+            $lastPath = $restaurant->photo;
 
-            $restaurant->photo = "thumbnails/$fileName";
+            $restaurant->photo = "thumbnails/restaurants/$fileName";
             $restaurant->save();
 
+            if (!is_null($lastPath) && Storage::exists("public/{$restaurant->photo}")) {
+                Storage::delete("public/{$restaurant->photo}");
+            }
+
             return response()->json([
-                'path' => "thumbnails/$fileName"
+                'path' => "thumbnails/restaurants/$fileName"
             ]);
 
         } catch (Exception $ex) {

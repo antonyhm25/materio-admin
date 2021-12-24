@@ -35,7 +35,7 @@ class AssingPermissionsSeeder extends Seeder
             PermissionsType::RESTAURANTS_CREATE_UPDATE,
             PermissionsType::RESTAURANTS_DELETE,
             
-            PermissionsType::MEAL_DEALS_VIEW,
+            PermissionsType::MEALS_VIEW,
             PermissionsType::MEALS_CREATE_UPDATE,
             PermissionsType::MEALS_DELETE,
 

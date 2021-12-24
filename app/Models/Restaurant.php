@@ -10,4 +10,9 @@ class Restaurant extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'address', 'user_id'];
+
+    public function meals() 
+    {
+        return $this->hasMany(Meal::class);
+    }
 }
