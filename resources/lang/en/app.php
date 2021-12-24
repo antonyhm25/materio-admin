@@ -17,6 +17,7 @@ return [
         'roles' => 'Roles',
         'permissions' => 'Permissions',
         'users' => 'Users',
+        'accounts' => 'User Account',
         'restaurants' => 'Restaurants',
         'meals' => 'Meals',
         'meal-deals' => 'Meal Deals'
@@ -32,6 +33,9 @@ return [
         'users-view' => 'View User List',
         'users-create-update' => 'Create and Update Users',
         'users-delete' => 'Delete Users',
+
+        'accounts-view' => 'View My Account',
+        'accounts-update' => 'Update My Account',
         
         'restaurants-view' => 'View Restaurant List',
         'restaurants-create-update' => 'Create and Update Restaurants',
@@ -57,5 +61,10 @@ return [
         'error' => 'internal server error, try again later.',
         'auth' => 'The provided credentials are incorrect.',
         'logout' => 'Session closed successfully.',
+    ],
+
+    'meal-deals' => [
+        'taken' => 'This meal deal has been taken',
+        'owner' => 'This meal deal does not belong to you'
     ],
 ];

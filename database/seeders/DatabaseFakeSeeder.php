@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Helpers\RolesType;
 use App\Models\Meal;
 use App\Models\Restaurant;
 use App\Models\User;
@@ -19,6 +20,9 @@ class DatabaseFakeSeeder extends Seeder
         User::factory(30)
             ->create()
             ->each(function ($user) {
+                $role = $user->type === 'admin' ? RolesType::ADMIN_RESTAURANT : RolesType::LOCAL;
+                $user->assignRole($role);
+
                 $restaurant = $user
                     ->restaurant()
                     ->save(Restaurant::factory()->make());

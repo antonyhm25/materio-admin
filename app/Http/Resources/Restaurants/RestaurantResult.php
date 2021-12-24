@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\UserConsumers;
+namespace App\Http\Resources\Restaurants;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserConsumerResult extends JsonResource
+class RestaurantResult extends JsonResource
 {
     /**
      * Transform the resource into an array.

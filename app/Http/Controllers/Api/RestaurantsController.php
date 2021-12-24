@@ -14,10 +14,9 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Resources\Users\UserPaginated;
-use App\Http\Resources\UserConsumers\UserConsumerResult;
+use App\Http\Resources\Restaurants\RestaurantResult;
 
-class UserConsumersController extends Controller
+class RestaurantsController extends Controller
 {
     public function store(Request $request)
     {
@@ -35,7 +34,7 @@ class UserConsumersController extends Controller
 
             $user = new User($request->all());
             $user->password = bcrypt($request->password);
-            $user->type = 'local';
+            $user->type = 'admin';
             $user->save();
             
             $user->restaurant()->create([
@@ -43,11 +42,11 @@ class UserConsumersController extends Controller
                 'address' => $request->restaurant['address']
             ]);
             
-            $user->assignRole(RolesType::LOCAL);
+            $user->assignRole(RolesType::ADMIN_RESTAURANT);
 
             DB::commit();
 
-            return new UserConsumerResult($user);
+            return new RestaurantResult($user);
         } catch (Exception $ex) {
             Log::error($ex);
             DB::rollBack();

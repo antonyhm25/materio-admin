@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Auth;
 
+use App\Helpers\RolesType;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserAuthenticated extends JsonResource
@@ -14,13 +15,21 @@ class UserAuthenticated extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $role = $this->getRoleNames()->first();
+
+        $data = [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
             'createdAt' => $this->created_at,
-            'role' => $this->getRoleNames()->first(),
+            'role' => $role,
             'permissions' => $this->getAllPermissions()->pluck('name'),
         ];
+
+        if ($role === RolesType::ADMIN_RESTAURANT) {
+            $data['restaurantId'] = $this->restaurant->id;
+        }
+
+        return $data;
     }
 }

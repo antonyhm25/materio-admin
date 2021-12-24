@@ -17,6 +17,7 @@ return [
         'roles' => 'Roles',
         'permissions' => 'Permisos',
         'users' => 'Usuarios',
+        'accounts' => 'Cuenta de Usuario',
         'restaurants' => 'Restaurantes',
         'meals' => 'Comidas',
         'meal-deals' => 'Oferta de Comidas'
@@ -32,6 +33,9 @@ return [
         'users-view' => 'Ver Lista de Usuarios',
         'users-create-update' => 'Crear y Actualizar Usuarios',
         'users-delete' => 'Eliminar Usuarios',
+
+        'accounts-view' => 'Ver Mi Cuenta',
+        'accounts-update' => 'Actualizar Mi Cuenta',
         
         'restaurants-view' => 'Ver Lista de Restaurantes',
         'restaurants-create-update' => 'Crear y Actualizar Restaurantes',
@@ -57,5 +61,10 @@ return [
         'error' => 'internal server error, try again later.',
         'auth' => 'Las credenciales proporcionadas son incorrectas.',
         'logout' => 'La sesión se cerró correctamente.',
+    ],
+
+    'meal-deals' => [
+        'taken' => 'Esta oferta de comida ha sido aceptada',
+        'owner' => 'Esta oferta de comida no te pertenece'
     ],
 ];

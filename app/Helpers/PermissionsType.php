@@ -14,9 +14,11 @@ class PermissionsType
     public const USERS_CREATE_UPDATE = 'users:create-update';
     public const USERS_DELETE = 'users:delete';
 
+    public const ACCOUNT_VIEW = 'account:view';
+    public const ACCOUNT_UPDATE = 'account:update';
+
     public const RESTAURANTS_VIEW = 'restaurants:view';
     public const RESTAURANTS_CREATE_UPDATE = 'restaurants:create-update';
-    public const RESTAURANTS_DELETE = 'restaurants:delete';
 
     public const MEALS_VIEW = 'resturants:view';
     public const MEALS_CREATE_UPDATE = 'resturants:create-update';

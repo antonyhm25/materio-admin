@@ -33,7 +33,6 @@ class AssingPermissionsSeeder extends Seeder
             
             PermissionsType::RESTAURANTS_VIEW,
             PermissionsType::RESTAURANTS_CREATE_UPDATE,
-            PermissionsType::RESTAURANTS_DELETE,
             
             PermissionsType::MEALS_VIEW,
             PermissionsType::MEALS_CREATE_UPDATE,
@@ -45,7 +44,10 @@ class AssingPermissionsSeeder extends Seeder
         );
 
         $adminRestaurant->givePermissionTo(
-            PermissionsType::MEAL_DEALS_VIEW,
+            PermissionsType::ACCOUNT_VIEW,
+            PermissionsType::ACCOUNT_UPDATE,
+
+            PermissionsType::MEALS_VIEW,
             PermissionsType::MEALS_CREATE_UPDATE,
             PermissionsType::MEALS_DELETE,
 
@@ -55,6 +57,9 @@ class AssingPermissionsSeeder extends Seeder
         );
 
         $userMobile->givePermissionTo(
+            PermissionsType::ACCOUNT_VIEW,
+            PermissionsType::ACCOUNT_UPDATE,
+            
             PermissionsType::MEAL_DEALS_VIEW,
             PermissionsType::MEAL_DEALS_STATUS,
         );

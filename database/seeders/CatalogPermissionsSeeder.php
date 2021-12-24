@@ -67,6 +67,21 @@ class CatalogPermissionsSeeder extends Seeder
         ]);
 
         /**
+         * Account
+         */
+        Permission::create([
+            'name' => PermissionsType::ACCOUNT_VIEW,
+            'display' => trans('app.permissions.accounts-view'),
+            'module' => trans('app.modules.accounts'),
+        ]);
+
+        Permission::create([
+            'name' => PermissionsType::ACCOUNT_UPDATE,
+            'display' => trans('app.permissions.accounts-update'),
+            'module' => trans('app.modules.accounts'),
+        ]);
+
+        /**
          * Restaurants 
          */
         Permission::create([
@@ -78,12 +93,6 @@ class CatalogPermissionsSeeder extends Seeder
         Permission::create([
             'name' => PermissionsType::RESTAURANTS_CREATE_UPDATE,
             'display' => trans('app.permissions.restaurants-create-update'),
-            'module' => trans('app.modules.restaurants'),
-        ]);
-
-        Permission::create([
-            'name' => PermissionsType::RESTAURANTS_DELETE,
-            'display' => trans('app.permissions.restaurants-delete'),
             'module' => trans('app.modules.restaurants'),
         ]);
 
