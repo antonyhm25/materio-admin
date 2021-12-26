@@ -57,6 +57,24 @@
       </div>
     </v-main>
 
+    <v-snackbar
+      :color="notifyColor"
+      :value="notifyIsVisible"
+    >
+      {{ notifyText }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="red"
+          text
+          v-bind="attrs"
+          @click="$store.commit('CLOSE_NOTIFY')"
+        >
+          Cerrar
+        </v-btn>
+      </template>
+    </v-snackbar>
+
     <v-footer
       app
       inset
@@ -97,11 +115,11 @@
 </template>
 
 <script>
-import { ref } from '@vue/composition-api'
 import { mdiMagnify, mdiBellOutline, mdiGithub } from '@mdi/js'
 import VerticalNavMenu from './components/vertical-nav-menu/VerticalNavMenu.vue'
 import ThemeSwitcher from './components/ThemeSwitcher.vue'
 import AppBarUserMenu from './components/AppBarUserMenu.vue'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -109,20 +127,22 @@ export default {
     ThemeSwitcher,
     AppBarUserMenu,
   },
-  setup() {
-    const isDrawerOpen = ref(null)
+  data: () => ({
+    isDrawerOpen: null,
 
-    return {
-      isDrawerOpen,
-
-      // Icons
-      icons: {
-        mdiMagnify,
-        mdiBellOutline,
-        mdiGithub,
-      },
-    }
-  },
+    icons: {
+      mdiMagnify,
+      mdiBellOutline,
+      mdiGithub,
+    },
+  }),
+  computed: {
+    ...mapGetters([
+      'notifyText',
+      'notifyIsVisible',
+      'notifyColor'
+    ])
+  }
 }
 </script>
 

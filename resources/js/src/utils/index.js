@@ -20,3 +20,22 @@ export const useRouter = () => {
 }
 
 export const _ = null
+
+export const getErrorFields = (errorResponse) => {
+  if (!errorResponse) return [];
+
+  const { errors } = errorResponse;
+  if (!errors) return [];
+
+  const errorFields = [];
+  for (const property in errors) {
+    const propertiesErrors = errors[property];
+    if (Array.isArray(propertiesErrors)) {
+      for (const item of propertiesErrors) {
+        errorFields.push(item)
+      }
+    }
+  }
+
+  return errorFields;
+}

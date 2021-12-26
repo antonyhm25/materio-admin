@@ -1,17 +1,22 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    redirect: 'dashboard',
+    redirect: 'dashboard'
   },
   {
     path: '/dashboard',
     name: 'dashboard',
     component: () => import('@/views/dashboard/Dashboard.vue'),
+    meta: {
+      auth: true,
+      permission: 'public'
+    }
   },
   {
     path: '/typography',
@@ -44,17 +49,25 @@ const routes = [
     component: () => import('@/views/pages/account-settings/AccountSettings.vue'),
   },
   {
-    path: '/pages/login',
+    path: '/auth/login',
     name: 'pages-login',
-    component: () => import('@/views/pages/Login.vue'),
+    component: () => import('@/views/auth/Login.vue'),
     meta: {
       layout: 'blank',
     },
+    beforeEnter: (to, from, next) => {
+      const isAuthenticated = store.getters['auth/check']
+      if (isAuthenticated && to.name === 'pages-login') {
+        next(from.path)
+      } else {
+        next()
+      }
+    }
   },
   {
     path: '/pages/register',
     name: 'pages-register',
-    component: () => import('@/views/pages/Register.vue'),
+    component: () => import('@/views/auth/Register.vue'),
     meta: {
       layout: 'blank',
     },
@@ -77,6 +90,29 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(route => route.meta.auth)) {
+    const isAuthenticated = store.getters['auth/check'];
+    if (!isAuthenticated) {
+      next({ name: 'pages-login' });
+    } else {
+      if (to.meta.permission) {
+        const permissions = store.getters['auth/user'].permissions.map(e => e.permission);
+        if (permissions.includes(to.meta.permission)
+          || to.meta.permission === 'public') {
+            next();
+        } else {
+          next('error-404');
+        }
+      } else {
+        next();
+      }
+    }
+  } else {
+    next();
+  }
 })
 
 export default router

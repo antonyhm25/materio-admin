@@ -15,14 +15,15 @@ class UserAuthenticated extends JsonResource
      */
     public function toArray($request)
     {
-        $role = $this->getRoleNames()->first();
+        $role = $this->roles()->first();
 
         $data = [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
             'createdAt' => $this->created_at,
-            'role' => $role,
+            'role' => $role->name,
+            'roleDisplay' => $role->display,
             'permissions' => $this->getAllPermissions()->pluck('name'),
         ];
 
