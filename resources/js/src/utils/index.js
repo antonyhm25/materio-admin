@@ -22,7 +22,6 @@ export const useRouter = () => {
 export const _ = null
 
 export const getErrorFields = (errorResponse) => {
-  console.log(errorResponse);
   if (!errorResponse) return [];
 
   const { errors } = errorResponse;

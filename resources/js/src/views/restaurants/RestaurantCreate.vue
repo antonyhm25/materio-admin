@@ -1,12 +1,12 @@
 <template>
-  <div id="users-create">
+  <div id="restaurant-create">
     <v-row>
       <v-col
         cols="12"
         md="8"
       >
         <v-card>
-          <v-card-title>Nuevo Usuario</v-card-title>
+          <v-card-title>Nuevo Restaurante</v-card-title>
 
           <v-divider></v-divider>
 
@@ -23,7 +23,7 @@
         cols="12"
         md="4"
       >
-       <user-permission role="superadmin" />
+       <user-permission role="adminrestaurant" />
       </v-col>
     </v-row>
   </div>
@@ -32,8 +32,8 @@
 import { mapActions } from 'vuex'
 import { getErrorFields } from '@/utils';
 
-import UserPermission from './shared/UserPermission.vue'
-import UserForm from './shared/UserForm.vue'
+import UserPermission from '@/views/users/shared/UserPermission.vue'
+import UserForm from '@/views/users/shared/UserForm.vue'
 
 export default {
   components: {
@@ -45,25 +45,28 @@ export default {
       firstName: '',
       lastName: '',
       email: '',
-      role: 'adminrestaurant',
       password: '',
       repeatPassword: '',
-      enable: 1
+      enable: 1,
+      restaurant: {
+        name: '',
+        address: ''
+      }
     },
 
     errors: [],
     isSaving: false
   }),
   methods: {
-    ...mapActions('user', ['createUser']),
+    ...mapActions('restaurant', ['createRestaurant']),
 
     async onSubmit() {
       try {
         this.isSaving = true;
 
-        const id = await this.createUser(this.user);
+        const id = await this.createRestaurant(this.user);
 
-        this.$router.push({ name: 'admin-users-view', params: { id } });
+        this.$router.push({ name: 'admin-restaurants-view', params: { id } });
       } catch (error) {
         if (error.status === 422) {
           this.errors = getErrorFields(error.data);

@@ -7,6 +7,11 @@
         <v-form class="multi-col-validation" @submit.prevent="onSubmit">
           <alert-form :errors="errors" />
 
+          <v-card-text v-if="user.restaurant">
+            <span class="text-xl font-weight-semibold mb-2">Cuenta de Usuario</span>
+            <v-divider></v-divider>
+          </v-card-text>
+
           <v-row>
             <v-col
               cols="12"
@@ -106,6 +111,38 @@
               </ValidationProvider>
 
             </v-col>
+
+            <template v-if="user.restaurant">
+              <v-card-text v-if="user.restaurant">
+                <span class="text-xl font-weight-semibold mb-2">Datos del Negocio</span>
+                <v-divider></v-divider>
+              </v-card-text>
+
+              <v-col cols="12">
+               <ValidationProvider name="Negocio" rules="required" v-slot="{ errors }">
+                  <v-text-field
+                    v-model="user.restaurant.name"
+                    label="Nombre del Restaurante"
+                    :error-messages="errors"
+                    outlined
+                    dense
+                  ></v-text-field>
+                </ValidationProvider>
+              </v-col>
+
+              <v-col cols="12">
+                <ValidationProvider name="Dirección" rules="required" v-slot="{ errors }">
+                  <v-text-field
+                    v-model="user.restaurant.address"
+                    label="Dirección"
+                    placeholder="Avenida, Calle, Colonia, Ciudad, Estado"
+                    :error-messages="errors"
+                    outlined
+                    dense
+                  ></v-text-field>
+                </ValidationProvider>
+              </v-col>
+            </template>
 
             <v-col cols="12">
               <v-btn

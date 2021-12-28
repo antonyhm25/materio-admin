@@ -75,16 +75,8 @@ export default {
     ...mapActions('auth', ['logout']),
 
     async onLogout() {
-      try {
-        await this.logout();
-        this.$router.push({ name: 'pages-login' });
-      } catch (error) {
-        console.log('error', error)
-        this.$store.commit('SEND_NOTIFY', {
-          message: error,
-          color: '#E53935' // red darken-1
-        });
-      }
+      await this.logout();
+      this.$router.push({ name: 'pages-login' });
     }
   }
 }

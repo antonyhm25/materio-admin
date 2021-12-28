@@ -80,7 +80,6 @@
 </template>
 <script>
 import { mdiShieldAccountOutline } from '@mdi/js'
-import { email } from 'vee-validate/dist/rules';
 
 export default {
   props: {

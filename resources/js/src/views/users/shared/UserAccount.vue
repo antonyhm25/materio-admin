@@ -33,21 +33,32 @@ export default {
   methods: {
     ...mapActions('user', ['updateUser']),
 
+    ...mapActions('restaurant', ['updateRestaurant']),
+
     async onSubmit() {
       try {
         this.isSaving = true;
 
         const payload = {
-          id: this.accountData.id,
-          payload: {
-            firstName: this.accountData.firstName,
-            lastName: this.accountData.lastName,
-            email: this.accountData.email,
-            enable: this.accountData.enable,
-          }
-        };
+            id: this.accountData.id,
+            payload: {
+              firstName: this.accountData.firstName,
+              lastName: this.accountData.lastName,
+              email: this.accountData.email,
+              enable: this.accountData.enable,
+            }
+          };
 
-        await this.updateUser(payload);
+        if (this.accountData.restaurant) {
+          payload.payload.restaurant = {
+            name: this.accountData.restaurant.name,
+            address: this.accountData.restaurant.address
+          }
+
+          await this.updateRestaurant(payload)
+        } else {
+          await this.updateUser(payload);
+        }
       } catch (error) {
         if (error.status === 422) {
           this.errors = getErrorFields(error.data);

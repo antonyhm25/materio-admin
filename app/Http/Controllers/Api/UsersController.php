@@ -37,13 +37,14 @@ class UsersController extends Controller
             $type = $request->type ?? null;
             $search = $request->search ?? null;
 
-            $query = User::select(
-                'id',
-                'full_name as name',
-                'email',
-                'enable',
-                'created_at as createdAt'
-            )
+            $query = User::query();
+            if (!is_null($type) && $type === 'admin') {
+                $query = $this->getUsersAdmin();
+            } else {
+                $query = $this->getUsersSystem();
+            }
+
+            $query = $query
                 ->orderBy($sortBy, $order)
                 ->search($search)
                 ->byType($type)
@@ -55,6 +56,30 @@ class UsersController extends Controller
 
             return response(trans('app.general.error'), 500);
         }
+    }
+
+    private function getUsersSystem() 
+    {
+        return  User::select(
+            'id',
+            'full_name as name',
+            'email',
+            'enable',
+            'created_at as createdAt'
+        );
+    }
+    
+    private function getUsersAdmin() 
+    {
+        return  User::select(
+            'users.id',
+            'users.full_name as name',
+            'users.email',
+            'users.enable',
+            'users.created_at as createdAt',
+            'restaurants.name as restaurant'
+        )
+        ->join('restaurants', 'restaurants.user_id', '=', 'users.id');
     }
     
     public function show(User $user)

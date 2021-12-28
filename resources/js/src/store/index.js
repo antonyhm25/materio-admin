@@ -2,8 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import AuthModule from './modules/auth'
-import UserModule from './modules/user'
 import RoleModule from './modules/role'
+import UserModule from './modules/user'
+import RestaurantModule from './modules/restaurant'
+import MealModule from './modules/meal'
 
 Vue.use(Vuex)
 
@@ -61,7 +63,9 @@ export default new Vuex.Store({
   },
   modules: {
     auth: AuthModule,
-    user: UserModule,
     role: RoleModule,
+    user: UserModule,
+    restaurant: RestaurantModule,
+    meal: MealModule,
   },
 })

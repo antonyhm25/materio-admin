@@ -7,6 +7,8 @@
       >
         <user-profile :user="currentUser"  class="mb-5" />
 
+        <restaurant-profile v-if="currentUser.restaurant" :user="currentUser"  class="mb-5" />
+
         <user-permission :role="currentUser.role" />
       </v-col>
 
@@ -16,14 +18,12 @@
       >
         <v-card>
           <v-tabs v-model="tab" show-arrows>
-            <template  v-for="tab in tabs" >
-              <v-tab :key="tab.id" v-if="canViewTabRestaurant(tab)">
-                <v-icon size="20" class="me-3">
-                  {{ tab.icon }}
-                </v-icon>
-                <span>{{ tab.title }}</span>
+            <v-tab  v-for="tab in tabs" :key="tab.id">
+              <v-icon size="20" class="me-3">
+                {{ tab.icon }}
+              </v-icon>
+              <span>{{ tab.title }}</span>
             </v-tab>
-            </template>
           </v-tabs>
 
           <v-tabs-items v-model="tab">
@@ -41,6 +41,12 @@
             </v-tab-item>
           </v-tabs-items>
         </v-card>
+
+        <v-card v-if="currentUser.restaurant" class="mt-7">
+          <v-card-title>Platillos</v-card-title>
+          <v-divider></v-divider>
+          <meal-list :loading="isMealsLoading" :items="meals" :total-items="totalItems" />
+        </v-card>
       </v-col>
     </v-row>
   </div>
@@ -55,43 +61,48 @@ import UserPasswordChange from './shared/UserPasswordChange.vue'
 import UserProfile from './shared/UserProfile.vue'
 import UserPermission from './shared/UserPermission.vue'
 
+import RestaurantProfile from '@/views/restaurants/shared/RestaurantProfile.vue'
+import MealList from '@/views/meals/shared/MealList.vue'
+
 export default {
   components: {
     UserAccount,
     UserPasswordReset,
     UserPasswordChange,
     UserProfile,
-    UserPermission
+    UserPermission,
+
+    RestaurantProfile,
+    MealList
   },
   data: () => ({
     tab: null,
+    isMealsLoading: true,
 
     tabs: [
       { id: 1, title: 'Mi Cuenta', icon: mdiAccountOutline },
       { id: 2, title: 'Seguridad', icon: mdiLockOpenOutline },
-      { id: 3, title: 'Negocio', icon: mdiOfficeBuildingMarkerOutline },
     ],
   }),
   computed: {
     ...mapGetters('user', ['currentUser']),
+    ...mapGetters('meal', ['meals', 'totalItems']),
 
     auth() {
       return this.$store.state.auth.user;
-    },
-
-    canViewTabRestaurant() {
-      return (tab) => {
-        if (tab.title !== 'Negocio') return true;
-
-        return tab.title === 'Negocio' && this.currentUser.role === 'adminrestaurant';
-      }
     }
   },
   methods: {
-    ...mapActions('user', ['getUser'])
+    ...mapActions('user', ['getUser']),
+    ...mapActions('meal', ['getMeals'])
   },
   async created() {
     await this.getUser(this.$route.params.id || this.auth.id);
+
+    if (this.currentUser && this.currentUser.restaurant) {
+      await  this.getMeals({ id: this.currentUser.restaurant.id, query: '' });
+      this.isMealsLoading = false;
+    }
   }
 }
 </script>

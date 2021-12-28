@@ -34,8 +34,9 @@ class UserResult extends JsonResource
         if (!is_null($this->restaurant)) {
             $data['restaurant'] = [
                 'id' => (int) $this->restaurant->id,
-                'photo' => $this->photo,
-                'address' => $this->restaurant->name,
+                'photo' => $this->restaurant->photo,
+                'name' => $this->restaurant->name,
+                'address' => $this->restaurant->address,
                 'createdAt' => $this->restaurant->created_at,
             ];
         }

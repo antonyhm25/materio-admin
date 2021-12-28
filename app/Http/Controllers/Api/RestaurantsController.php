@@ -23,7 +23,8 @@ class RestaurantsController extends Controller
         $this->authorize('create', User::class);
 
         $request->validate([
-            'name' => 'required',
+            'firstName' => 'required',
+            'lastName' => 'required',
             'email' => 'required|unique:users|email',
             'password' => 'required|min:6|alpha_num',
             'repeatPassword' => 'required|same:password',
@@ -34,8 +35,15 @@ class RestaurantsController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = new User($request->all());
-            $user->password = bcrypt($request->password);
+            $user = new User([
+                'first_name' => $request->firstName,
+                'last_name' => $request->lastName,
+                'full_name' => "{$request->firstName} {$request->lastName}",
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+                'enable' => $request->enable,
+            ]);
+
             $user->type = 'admin';
             $user->save();
             
@@ -62,7 +70,8 @@ class RestaurantsController extends Controller
         $this->authorize('update', $user);
         
         $request->validate([
-            'name' => 'required',
+            'firstName' => 'required',
+            'lastName' => 'required',
             'email' => [
                 'required',
                 Rule::unique('users')->ignore($user->id), 
@@ -110,12 +119,12 @@ class RestaurantsController extends Controller
             ->save("$filePath/$fileName");
             
             $lastPath = $restaurant->photo;
-
+           
             $restaurant->photo = "thumbnails/restaurants/$fileName";
             $restaurant->save();
 
-            if (!is_null($lastPath) && Storage::exists("public/{$restaurant->photo}")) {
-                Storage::delete("public/{$restaurant->photo}");
+            if (!is_null($lastPath) && Storage::exists("public/{$lastPath}")) {
+                Storage::delete("public/{$lastPath}");
             }
 
             return response()->json([

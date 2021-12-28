@@ -46,6 +46,33 @@ const routes = [
     }
   },
   {
+    path: '/admin/restaurants',
+    name:'admin-restaurants',
+    component: () => import('@/views/restaurants/RestaurantPage.vue'),
+    meta: {
+      auth: true,
+      permission: 'restaurants:view'
+    }
+  },
+  {
+    path: '/admin/restaurants/create',
+    name:'admin-restaurants-create',
+    component: () => import('@/views/restaurants/RestaurantCreate.vue'),
+    meta: {
+      auth: true,
+      permission: 'restaurants:create-update'
+    }
+  },
+  {
+    path: '/admin/restaurants/:id/view',
+    name:'admin-restaurants-view',
+    component: () => import('@/views/users/UserView.vue'),
+    meta: {
+      auth: true,
+      permission: 'restaurants:view'
+    }
+  },
+  {
     path: '/account/view',
     name:'account-view',
     component: () => import('@/views/users/UserView.vue'),

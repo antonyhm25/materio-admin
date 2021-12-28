@@ -17,6 +17,7 @@ class MealItemPaginate extends JsonResource
         return [
             'id' => (int) $this->id,
             'name' => $this->name,
+            'photo' => $this->photo,
             'description' => $this->description,
             'restaurant' => $this->restaurant->name,
             'createdAt' => $this->created_at,
