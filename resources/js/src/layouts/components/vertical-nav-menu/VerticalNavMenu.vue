@@ -42,6 +42,7 @@
       <nav-menu-section-title title="ADMINISTRACIÓN"></nav-menu-section-title>
       <nav-menu-link title="Usuarios" :to="{ name: 'admin-users' }" :icon="icons.mdiAccountGroup"></nav-menu-link>
       <nav-menu-link title="Restaurantes" :to="{ name: 'admin-restaurants' }" :icon="icons.mdiOfficeBuildingMarkerOutline"></nav-menu-link>
+      <nav-menu-link title="Usuarios Moviles" :to="{ name: 'admin-mobiles' }" :icon="icons.mdiAccountGroup"></nav-menu-link>
       <nav-menu-link title="Typography" :to="{ name: 'typography' }" :icon="icons.mdiAlphaTBoxOutline"></nav-menu-link>
       <nav-menu-link title="Icons" :to="{ name: 'icons' }" :icon="icons.mdiEyeOutline"></nav-menu-link>
       <nav-menu-link title="Cards" :to="{ name: 'cards' }" :icon="icons.mdiCreditCardOutline"></nav-menu-link>

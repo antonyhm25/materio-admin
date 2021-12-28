@@ -23,11 +23,13 @@ class DatabaseFakeSeeder extends Seeder
                 $role = $user->type === 'admin' ? RolesType::ADMIN_RESTAURANT : RolesType::LOCAL;
                 $user->assignRole($role);
 
-                $restaurant = $user
-                    ->restaurant()
-                    ->save(Restaurant::factory()->make());
+               if ($role === RolesType::ADMIN_RESTAURANT) {
+                    $restaurant = $user
+                        ->restaurant()
+                        ->save(Restaurant::factory()->make());
 
-                $restaurant->meals()->saveMany(Meal::factory(10)->make()->unique('name'));
+                    $restaurant->meals()->saveMany(Meal::factory(10)->make()->unique('name'));
+               }
             });
     }
 }

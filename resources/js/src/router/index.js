@@ -73,6 +73,24 @@ const routes = [
     }
   },
   {
+    path: '/admin/mobiles',
+    name:'admin-mobiles',
+    component: () => import('@/views/users-mobiles/UserPage.vue'),
+    meta: {
+      auth: true,
+      permission: 'users:view'
+    }
+  },
+  {
+    path: '/admin/mobiles/:id/view',
+    name:'admin-mobiles-view',
+    component: () => import('@/views/users/UserView.vue'),
+    meta: {
+      auth: true,
+      permission: 'users:view'
+    }
+  },
+  {
     path: '/account/view',
     name:'account-view',
     component: () => import('@/views/users/UserView.vue'),

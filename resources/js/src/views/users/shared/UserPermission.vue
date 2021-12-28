@@ -70,6 +70,7 @@ export default {
       { module: 'Ofertas de Comidas', title: 'Ver Lista de Ofertas de Comidas', roles: ['superadmin', 'adminrestaurant', 'local'] },
       { module: 'Ofertas de Comidas', title: 'Crear y Actualizar Ofertas de Comidas', roles: ['adminrestaurant'] },
       { module: 'Ofertas de Comidas', title: 'Eliminar Ofertas de Comidas', roles: ['adminrestaurant'] },
+      { module: 'Ofertas de Comidas', title: 'Aceptar Ofertas de Comidas', roles: ['local'] },
     ],
 
     icons: {
