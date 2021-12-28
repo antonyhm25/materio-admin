@@ -22,7 +22,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)
             ->where('enable', 1)
-            ->where('type', 'admin')
+            ->whereIn('type', ['admin', 'system'])
             ->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {

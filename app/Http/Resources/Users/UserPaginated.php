@@ -10,8 +10,6 @@ class UserPaginated extends ResourceCollection
     {
         return $this->resource;
     }
-
-    public $collects = UserItemPaginate::class;
 }
 
 

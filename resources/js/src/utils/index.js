@@ -22,6 +22,7 @@ export const useRouter = () => {
 export const _ = null
 
 export const getErrorFields = (errorResponse) => {
+  console.log(errorResponse);
   if (!errorResponse) return [];
 
   const { errors } = errorResponse;
@@ -38,4 +39,32 @@ export const getErrorFields = (errorResponse) => {
   }
 
   return errorFields;
+}
+
+export const toQueryParams = (model) => {
+  if (!(typeof model === 'object')) {
+    return ''
+  }
+
+  let queryString = '?'
+  let count = 0;
+
+  for (const property in model) {
+    if (model[property] !== undefined && model[property] !== null && model[property] !== "") {
+
+      if (Array.isArray(model[property]) && model[property].length === 0) {
+        break
+      }
+
+      if (count > 0) {
+        queryString += '&'
+      }
+      queryString += `${property}=${model[property]}`
+
+      count++;
+    }
+
+  }
+
+  return queryString
 }

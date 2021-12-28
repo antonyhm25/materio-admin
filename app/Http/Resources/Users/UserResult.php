@@ -8,13 +8,19 @@ class UserResult extends JsonResource
 {
     public function toArray($request)
     {
+        $role = $this->roles()->first();
+
         $data = [
             'id' => $this->id,
-            'name' => $this->name,
+            'avatar' => $this->avatar,
+            'name' => $this->full_name,
+            'firstName' => $this->first_name,
+            'lastName' => $this->last_name,
             'email' => $this->email,
             'enable' => $this->enable,
             'createdAt' => $this->created_at,
-            'role' => $this->getRoleNames()->first(),
+            'role' => $role->name,
+            'roleName' => $role->display,
             'permissions' => $this->getAllPermissions()->map(function ($item) {
                 return [
                     'id' => (int) $item->id,

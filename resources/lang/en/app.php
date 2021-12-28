@@ -51,7 +51,7 @@ return [
         'meal-deals-status' => 'Change Status Meal Deals',
     ],
 
-    'roles' => [
+    'role-names' => [
         'super-admin' => 'Super Administrator',
         'admin-restaurant' => 'Administrator Restaurant',
         'local' => 'Local'

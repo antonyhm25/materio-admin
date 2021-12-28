@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/roles', [RolesController::class, 'index']);
     Route::get('/roles/{role}', [RolesController::class, 'show']);
+    Route::get('/roles/{role}/permissions', [RolesController::class, 'permissions']);
     Route::post('/roles', [RolesController::class, 'store']);
     Route::put('/roles/{role}', [RolesController::class, 'update']);
     Route::delete('/roles/{role}', [RolesController::class, 'destroy']);
@@ -42,8 +43,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users', [UsersController::class, 'index']);
     Route::get('/users/{user}', [UsersController::class, 'show']);
     Route::post('/users', [UsersController::class, 'store']);
+    Route::put('/users/{user}/password-reset', [UsersController::class, 'passwordReset']);
+    Route::put('/users/{user}/password-change', [UsersController::class, 'passwordChange']);
     Route::put('/users/{user}', [UsersController::class, 'update']);
     Route::delete('/users/{user}', [UsersController::class, 'destroy']);
+    Route::post('/users/delete-many', [UsersController::class, 'destroyMany']);
 
     Route::get('/users/{user}/local/meal-deals', [UserMobilesController::class, 'mealDeals']);
     Route::put('/users/{user}/local', [UserMobilesController::class, 'update']);

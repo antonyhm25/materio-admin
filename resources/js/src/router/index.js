@@ -19,6 +19,42 @@ const routes = [
     }
   },
   {
+    path: '/admin/users',
+    name:'admin-users',
+    component: () => import('@/views/users/UserPage.vue'),
+    meta: {
+      auth: true,
+      permission: 'users:view'
+    }
+  },
+  {
+    path: '/admin/users/create',
+    name:'admin-users-create',
+    component: () => import('@/views/users/UserCreate.vue'),
+    meta: {
+      auth: true,
+      permission: 'users:create-update'
+    }
+  },
+  {
+    path: '/admin/users/:id/view',
+    name:'admin-users-view',
+    component: () => import('@/views/users/UserView.vue'),
+    meta: {
+      auth: true,
+      permission: 'users:view'
+    }
+  },
+  {
+    path: '/account/view',
+    name:'account-view',
+    component: () => import('@/views/users/UserView.vue'),
+    meta: {
+      auth: true,
+      permission: 'account:view'
+    }
+  },
+  {
     path: '/typography',
     name: 'typography',
     component: () => import('@/views/typography/Typography.vue'),
@@ -46,7 +82,7 @@ const routes = [
   {
     path: '/pages/account-settings',
     name: 'pages-account-settings',
-    component: () => import('@/views/pages/account-settings/AccountSettings.vue'),
+    component: () => import('@/views/auth/account-settings/AccountSettings.vue'),
   },
   {
     path: '/auth/login',
@@ -99,7 +135,7 @@ router.beforeEach((to, from, next) => {
       next({ name: 'pages-login' });
     } else {
       if (to.meta.permission) {
-        const permissions = store.getters['auth/user'].permissions.map(e => e.permission);
+        const permissions = store.getters['auth/user'].permissions;
         if (permissions.includes(to.meta.permission)
           || to.meta.permission === 'public') {
             next();

@@ -5,6 +5,8 @@
             "@/*": [
                 "resources/js/src/*"
             ],
-        }
+        },
+        "resolveJsonModule": true,
+        "esModuleInterop": true
     }
 }

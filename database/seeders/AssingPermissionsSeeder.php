@@ -27,6 +27,9 @@ class AssingPermissionsSeeder extends Seeder
             PermissionsType::ROLES_CREATE_UPDATE,
             PermissionsType::ROLES_DELETE,
 
+            PermissionsType::ACCOUNT_VIEW,
+            PermissionsType::ACCOUNT_UPDATE,
+
             PermissionsType::USERS_VIEW,
             PermissionsType::USERS_CREATE_UPDATE,
             PermissionsType::USERS_DELETE,

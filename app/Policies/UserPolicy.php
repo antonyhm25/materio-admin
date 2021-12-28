@@ -65,14 +65,14 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
+        if ($user->tokenCan(PermissionsType::USERS_CREATE_UPDATE)) {
+            return true;
+        }
+        
         if ($user->tokenCan(PermissionsType::ACCOUNT_UPDATE)) {
             return $user->id === $model->id
                 ? Response::allow()
                 : Response::deny(trans('app.users.owner'));
-        }
-
-        if ($user->tokenCan(PermissionsType::USERS_CREATE_UPDATE)) {
-            return true;
         }
     }
 
@@ -84,6 +84,20 @@ class UserPolicy
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function delete(User $user, User $model)
+    {
+        if ($user->tokenCan(PermissionsType::USERS_DELETE)) {
+            return true;
+        }
+    }
+
+    /**
+     * Determine whether the user can delete ona or many models.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\User  $model
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function deleteMany(User $user)
     {
         if ($user->tokenCan(PermissionsType::USERS_DELETE)) {
             return true;

@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
+use Creativeorange\Gravatar\Facades\Gravatar;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -22,7 +23,9 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
+        'full_name',
         'email',
         'password',
         'enable',
@@ -47,6 +50,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ['avatar', 'role'];
+
+    public function getAvatarAttribute() 
+    {
+        return Gravatar::get($this->email);
+    }
+
+    public function getRoleAttribute() 
+    {
+        return $this->roles()->pluck('display')->first();
+    }
+
     public function restaurant() 
     {
         return $this->hasOne(Restaurant::class);
@@ -63,7 +78,16 @@ class User extends Authenticatable
             return $query;
         }
 
-        return $query->where('name', 'like', "%$search%")
+        return $query->where('full_name', 'like', "%$search%")
             ->orWhere('email', 'like', "%$search%");
+    }
+
+    public function scopeByType(Builder $query, $type)
+    {
+        if (is_null($type)) {
+            return $query;
+        }
+
+        return $query->where('type', $type);
     }
 }

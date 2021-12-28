@@ -20,9 +20,9 @@ class PermissionsType
     public const RESTAURANTS_VIEW = 'restaurants:view';
     public const RESTAURANTS_CREATE_UPDATE = 'restaurants:create-update';
 
-    public const MEALS_VIEW = 'resturants:view';
-    public const MEALS_CREATE_UPDATE = 'resturants:create-update';
-    public const MEALS_DELETE = 'resturants:delete';
+    public const MEALS_VIEW = 'meals:view';
+    public const MEALS_CREATE_UPDATE = 'meals:create-update';
+    public const MEALS_DELETE = 'meals:delete';
 
     public const MEAL_DEALS_VIEW = 'meal-deals:view';
     public const MEAL_DEALS_CREATE_UPDATE = 'meal-deals:create-update';

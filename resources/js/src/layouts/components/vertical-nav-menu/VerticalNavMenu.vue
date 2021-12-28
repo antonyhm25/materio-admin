@@ -39,26 +39,16 @@
         <nav-menu-link title="Register" :to="{ name: 'pages-register' }" target="_blank"></nav-menu-link>
         <nav-menu-link title="Error" :to="{ name: 'error-404' }" target="_blank"></nav-menu-link>
       </nav-menu-group>
-      <nav-menu-section-title title="USER INTERFACE"></nav-menu-section-title>
+      <nav-menu-section-title title="ADMINISTRACIÓN"></nav-menu-section-title>
+      <nav-menu-link title="Usuarios" :to="{ name: 'admin-users' }" :icon="icons.mdiAccountGroup"></nav-menu-link>
       <nav-menu-link title="Typography" :to="{ name: 'typography' }" :icon="icons.mdiAlphaTBoxOutline"></nav-menu-link>
       <nav-menu-link title="Icons" :to="{ name: 'icons' }" :icon="icons.mdiEyeOutline"></nav-menu-link>
       <nav-menu-link title="Cards" :to="{ name: 'cards' }" :icon="icons.mdiCreditCardOutline"></nav-menu-link>
       <nav-menu-link title="Tables" :to="{ name: 'simple-table' }" :icon="icons.mdiTable"></nav-menu-link>
       <nav-menu-link title="Form Layouts" :to="{ name: 'form-layouts' }" :icon="icons.mdiFormSelect"></nav-menu-link>
+      <nav-menu-section-title title="CONFIGURACIÓN"></nav-menu-section-title>
+      <nav-menu-link title="Mi Cuenta" :to="{ name: 'account-view' }" :icon="icons.mdiAccountCogOutline"></nav-menu-link>
     </v-list>
-    <a
-      href="https://themeselection.com/products/materio-vuetify-vuejs-laravel-admin-template"
-      target="_blank"
-      rel="nofollow"
-    >
-      <v-img
-        :src="require(`@/assets/images/pro/upgrade-banner-${$vuetify.theme.dark ? 'dark' : 'light'}.png`).default"
-        alt="upgrade-banner"
-        transition="scale-transition"
-        class="upgrade-banner mx-auto"
-        max-width="230"
-      ></v-img>
-    </a>
   </v-navigation-drawer>
 </template>
 
@@ -73,6 +63,7 @@ import {
   mdiFileOutline,
   mdiFormSelect,
   mdiAccountCogOutline,
+  mdiAccountGroup
 } from '@mdi/js'
 import NavMenuSectionTitle from './components/NavMenuSectionTitle.vue'
 import NavMenuGroup from './components/NavMenuGroup.vue'
@@ -101,6 +92,7 @@ export default {
         mdiFileOutline,
         mdiFormSelect,
         mdiAccountCogOutline,
+        mdiAccountGroup
       },
     }
   },

@@ -2,8 +2,33 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import AuthModule from './modules/auth'
+import UserModule from './modules/user'
+import RoleModule from './modules/role'
 
 Vue.use(Vuex)
+
+const colorState = (status) => {
+  let color = '#E53935'; // red
+  switch(status) {
+    case 500:
+    case 400:
+    case 422:
+      color = '#E53935';
+      break;
+    case 403:
+      color = '#FFEA00'
+      break;
+    case 201:
+    case 204:
+      color = '#43A047';
+      break;
+  }
+
+  return color;
+}
+
+const SEND_NOTIFICATION = 'SEND_NOTIFICATION';
+const CLOSE_NOTIFICATION = 'CLOSE_NOTIFICATION';
 
 export default new Vuex.Store({
   state: {
@@ -17,18 +42,26 @@ export default new Vuex.Store({
     notifyColor: state => state.notifyColor,
   },
   mutations: {
-    ['SEND_NOTIFY'] (state, { message, color }) {
+    [SEND_NOTIFICATION] (state, { message, status }) {
       state.notifyText = message;
-      state.notifyColor = color;
+      state.notifyColor = colorState(status);
       state.notifyIsVisible = true;
     },
 
-    ['CLOSE_NOTIFY'] (state) {
+    [CLOSE_NOTIFICATION] (state) {
       state.notifyIsVisible = false
     }
   },
-  actions: {},
+  actions: {
+    sendNotification({ commit }, { message, status }) {
+      commit(SEND_NOTIFICATION, { message, status });
+
+      setTimeout(() => commit(CLOSE_NOTIFICATION), 6000);
+    }
+  },
   modules: {
-    auth: AuthModule
+    auth: AuthModule,
+    user: UserModule,
+    role: RoleModule,
   },
 })

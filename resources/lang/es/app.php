@@ -51,7 +51,7 @@ return [
         'meal-deals-status' => 'Cambiar Estados de las Ofertas de Comidas',
     ],
 
-    'roles' => [
+    'role-names' => [
         'super-admin' => 'Super Administrador',
         'admin-restaurant' => 'Administrador del Restaurante',
         'local' => 'Local'

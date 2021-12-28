@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Permissions\PermissionDetail;
 use App\Http\Resources\Roles\RoleCreated;
 use App\Http\Resources\Roles\RoleDetail;
 use App\Http\Resources\Roles\RoleList;
@@ -114,6 +115,18 @@ class RolesController extends Controller
             $role->delete();
 
             return response(null, 204);
+        } catch (Exception $ex) {
+            Log::error($ex);
+
+            return response(trans('app.general.error'), 500);
+        }
+    }
+
+    public function permissions(Role $role) 
+    {
+        try {
+            $permissions = $role->getAllPermissions();
+            return PermissionDetail::collection($permissions);
         } catch (Exception $ex) {
             Log::error($ex);
 

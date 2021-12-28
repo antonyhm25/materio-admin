@@ -69,6 +69,7 @@
                 block color="primary"
                 class="mt-6"
                 type="submit"
+                :loading="isLoading"
               > Entrar </v-btn>
             </v-form>
           </ValidationObserver>
@@ -109,17 +110,7 @@ import { mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js';
 import { getErrorFields } from '@/utils';
 import { mapActions } from 'vuex';
 
-import { ValidationObserver, ValidationProvider, extend } from 'vee-validate';
-import { required, email } from 'vee-validate/dist/rules';
-
-extend('email', {
-  ...email,
-  message: '{_field_} debería ser valido.'
-});
-extend('required', {
-  ...required,
-  message: '{_field_} no puede ser vacio.'
-});
+import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
 export default {
   components: {
@@ -130,6 +121,7 @@ export default {
     isPasswordVisible: false,
     email: '',
     password: '',
+    isLoading: false,
 
     icons: {
       mdiEyeOutline,
@@ -145,6 +137,8 @@ export default {
       try {
         const valid = await this.$refs.login.validate()
         if (valid) {
+          this.isLoading = true;
+
           await this.login({
             email: this.email,
             password: this.password,
@@ -155,7 +149,9 @@ export default {
           this.$router.push({ name: 'dashboard' });
         }
       } catch (error) {
-        this.errors = getErrorFields(error);
+        this.errors = getErrorFields(error.data);
+      } finally {
+        this.isLoading = false;
       }
     }
   }

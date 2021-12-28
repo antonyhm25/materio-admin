@@ -17,19 +17,19 @@ class RolesSeeder extends Seeder
     {
         Role::create([
             'name' => RolesType::SUPER_ADMIN,
-            'display' => trans('app.roles.super-admin'),
+            'display' => trans('app.role-names.super-admin'),
             'locked' => 1,
         ]);
         
         Role::create([
             'name' => RolesType::ADMIN_RESTAURANT,
-            'display' => trans('app.roles.admin-restaurant'),
+            'display' => trans('app.role-names.admin-restaurant'),
             'locked' => 1,
         ]);
 
         Role::create([
             'name' => RolesType::LOCAL,
-            'display' => trans('app.roles.local'),
+            'display' => trans('app.role-names.local'),
             'locked' => 1,
         ]);
     }

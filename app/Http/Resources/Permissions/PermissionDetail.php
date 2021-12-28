@@ -19,6 +19,7 @@ class PermissionDetail extends JsonResource
             'name' => $this->name,
             'display' => $this->display,
             'module' => $this->module,
+            'createdAt' => $this->created_at,
         ];
     }
 }

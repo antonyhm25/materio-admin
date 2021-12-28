@@ -10,9 +10,11 @@ class UserItemPaginate extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'avatar' => $this->avatar,
+            'full_name' => $this->full_name,
             'email' => $this->email,
             'enable' => $this->enable,
+            'role' => $this->roles()->pluck('display')->first(),
             'createdAt' => $this->created_at,
         ];
     }
