@@ -63,6 +63,8 @@ class RestaurantPolicy
                     : Response::deny(trans('app.general.owner'));
             }
         }
+
+        return Response::deny(trans('app.general.forbidden'));
     }
 
     /**
@@ -81,6 +83,8 @@ class RestaurantPolicy
                     : Response::deny(trans('app.general.owner'));
             }
         }
+
+        return Response::deny(trans('app.general.forbidden'));
     }
 
     /**
@@ -92,13 +96,35 @@ class RestaurantPolicy
      */
     public function delete(User $user, Restaurant $restaurant)
     {
-        if ($user->tokenCan(PermissionsType::MEALS_CREATE_UPDATE)) {
+        if ($user->tokenCan(PermissionsType::MEALS_DELETE)) {
             if (!is_null($user->restaurant)) {
                 return $user->restaurant->id === $restaurant->id
                     ? Response::allow()
                     : Response::deny(trans('app.general.owner'));
             }
         }
+
+        return Response::deny(trans('app.general.forbidden'));
+    }
+    
+    /**
+     * Determine whether the user can delete the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Restaurant  $restaurant
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function deleteManyMeals(User $user, Restaurant $restaurant)
+    {
+        if ($user->tokenCan(PermissionsType::MEALS_DELETE)) {
+            if (!is_null($user->restaurant)) {
+                return $user->restaurant->id === $restaurant->id
+                    ? Response::allow()
+                    : Response::deny(trans('app.general.owner'));
+            }
+        }
+
+        return Response::deny(trans('app.general.forbidden'));
     }
 
     /**

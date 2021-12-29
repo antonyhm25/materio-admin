@@ -62,6 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/restaurants/{restaurant}/meals/{meal}/photo', [MealsController::class, 'uploadPhoto']);
     Route::put('/restaurants/{restaurant}/meals/{meal}', [MealsController::class, 'update']);
     Route::delete('/restaurants/{restaurant}/meals/{meal}', [MealsController::class, 'destroy']);
+    Route::post('/restaurants/{restaurant}/meals/destroy-many', [MealsController::class, 'destroyMany']);
     
     Route::get('/restaurants/{restaurant}/meal-deals', [MealDealsController::class, 'index']);
     Route::get('/restaurants/{restaurant}/meal-deals/{meal}', [MealDealsController::class, 'show']);

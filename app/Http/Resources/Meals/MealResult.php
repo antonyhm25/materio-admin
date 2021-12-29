@@ -17,6 +17,7 @@ class MealResult extends JsonResource
         return [
             'id' => (int) $this->id,
             'name' => $this->name,
+            'photo' => is_null($this->photo) ? null : "/storage/{$this->photo}",
             'description' => $this->description,
             'restaurantId' => $this->restaurant_id,
             'createdAt' => $this->created_at

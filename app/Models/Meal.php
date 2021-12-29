@@ -11,7 +11,7 @@ class Meal extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'description', 'restaurant_id'];
+    protected $fillable = ['name', 'photo', 'description', 'restaurant_id'];
 
     public function restaurant()
     {

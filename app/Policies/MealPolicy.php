@@ -40,7 +40,6 @@ class MealPolicy
             }
         
             if (!is_null($user->restaurant)) {
-                dd($user->restaurant->id);
                 return $user->restaurant->id === $meal->restaurant_id
                     ? Response::allow()
                     : Response::deny('app.general.owner');

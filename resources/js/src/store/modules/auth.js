@@ -1,4 +1,3 @@
-import axios from '@/plugins/axios'
 import Cookies from 'js-cookie'
 
 import * as authEndpoint from '@/endpoints/auth'
@@ -14,11 +13,12 @@ const getters = {
   user: state => state.user,
   token: state => state.token,
   check: state => state.user !== null,
-  permissions: state => {
-    if (state.user) {
-      return state.user.permissions.map(e => e.permission)
+  hasPermissions: state => {
+    return (permissions) => {
+      if (!state.user) return false;
+
+      return state.user.permissions.some(e => permissions.includes(e));
     }
-    return []
   }
 }
 

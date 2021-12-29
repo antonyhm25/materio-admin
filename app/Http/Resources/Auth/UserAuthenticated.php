@@ -28,8 +28,13 @@ class UserAuthenticated extends JsonResource
             'permissions' => $this->getAllPermissions()->pluck('name'),
         ];
 
-        if ($role === RolesType::ADMIN_RESTAURANT) {
-            $data['restaurantId'] = $this->restaurant->id;
+        if (!is_null($this->restaurant)) {
+            $data['restaurant'] = [
+                'id' => (int) $this->restaurant->id,
+                'name' => $this->restaurant->name,
+                'photo' => $this->restaurant->photo,
+                'address' => $this->restaurant->address,
+            ];
         }
 
         return $data;

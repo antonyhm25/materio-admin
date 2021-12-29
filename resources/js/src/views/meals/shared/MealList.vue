@@ -23,7 +23,7 @@
             >
           </v-avatar>
           <div class="d-flex flex-column">
-            <router-link :to="{ name: 'admin-restaurants-view', params: { id: item.id } }" class="text--primary font-weight-semibold text-truncate cursor-pointer text-decoration-none">{{ item.name }}</router-link>
+            <span class="text--primary font-weight-semibold text-truncate cursor-pointer text-decoration-none">{{ item.name }}</span>
             <small>General</small>
           </div>
         </div>

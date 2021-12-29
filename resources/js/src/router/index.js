@@ -91,6 +91,33 @@ const routes = [
     }
   },
   {
+    path: '/meals',
+    name:'module-meals',
+    component: () => import('@/views/meals/MealPage.vue'),
+    meta: {
+      auth: true,
+      permission: 'meals:create-update'
+    }
+  },
+  {
+    path: '/meals/create',
+    name:'module-meals-create',
+    component: () => import('@/views/meals/MealCreate.vue'),
+    meta: {
+      auth: true,
+      permission: 'meals:create-update'
+    }
+  },
+  {
+    path: '/meals/:id/view',
+    name:'module-meals-view',
+    component: () => import('@/views/meals/MealView.vue'),
+    meta: {
+      auth: true,
+      permission: 'meals:create-update'
+    }
+  },
+  {
     path: '/account/view',
     name:'account-view',
     component: () => import('@/views/users/UserView.vue'),

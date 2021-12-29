@@ -41,6 +41,10 @@ class UserPolicy
         if ($user->tokenCan(PermissionsType::USERS_VIEW)) {
             return true;
         }
+
+        if ($user->tokenCan(PermissionsType::ACCOUNT_VIEW)) {
+            return true;
+        }
     }
 
     /**

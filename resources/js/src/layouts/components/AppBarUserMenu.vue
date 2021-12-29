@@ -3,7 +3,7 @@
     <template v-slot:activator="{ on, attrs }">
       <v-badge bottom color="success" overlap offset-x="12" offset-y="12" class="ms-4" dot>
         <v-avatar size="40px" v-bind="attrs" v-on="on">
-          <v-img :src="auth.avatar"></v-img>
+          <v-img :src="photo(auth)"></v-img>
         </v-avatar>
       </v-badge>
     </template>
@@ -11,12 +11,26 @@
       <div class="pb-3 pt-2">
         <v-badge bottom color="success" overlap offset-x="12" offset-y="12" class="ms-4" dot>
           <v-avatar size="40px">
-            <v-img :src="auth.avatar"></v-img>
+            <v-img :src="photo(auth)"></v-img>
           </v-avatar>
         </v-badge>
         <div class="d-inline-flex flex-column justify-center ms-3" style="vertical-align: middle">
-          <span class="text--primary font-weight-semibold mb-n1"> {{ auth.name }} </span>
-          <small class="text--disabled text-capitalize">{{ auth.roleDisplay }}</small>
+          <span class="text--primary font-weight-semibold mb-n1">
+            <span
+              class="d-inline-block text-truncate"
+              style="max-width: 130px;"
+            >
+              {{ auth ? auth.name : '' }}
+            </span>
+          </span>
+          <small class="text--disabled text-capitalize">
+            <span
+              class="d-inline-block text-truncate"
+              style="max-width: 130px;"
+            >
+              {{ auth ? auth.roleDisplay : '' }}
+            </span>
+          </small>
         </div>
       </div>
 
@@ -69,6 +83,12 @@ export default {
   computed: {
     auth() {
       return this.$store.state.auth.user;
+    },
+    photo() {
+      return (user) => {
+        if (user) return user.avatar
+        return ''
+      }
     }
   },
   methods: {

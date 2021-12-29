@@ -71,18 +71,16 @@ class MealsController extends Controller
                 'required',
                 'max:100',
                 Rule::unique('meals')
-                    ->where('restaurant_id', $request->restaurantId)
+                    ->where('restaurant_id', $restaurant->id)
                     ->whereNull('deleted_at')
             ],
-            'description' => 'nullable|max:500',
-            'restaurantId' => 'required|integer|exists:restaurants,id'
+            'description' => 'nullable|max:500'
         ]);
 
         try {
-            $meal = Meal::create([
+            $meal = $restaurant->meals()->create([
                 'name' => $request->name,
-                'description' => $request->description,
-                'restaurant_id' => $request->restaurantId
+                'description' => $request->description
             ]);
 
             return new MealResult($meal);
@@ -95,14 +93,15 @@ class MealsController extends Controller
 
     public function update(Request $request, Restaurant $restaurant, Meal $meal)
     {
-        $this->authorize('update', [$restaurant, $meal]);
-
+        $this->authorize('update', $restaurant);
+        $this->authorize('update', $meal);
+       
         $request->validate([
             'name' => [
                 'required',
                 'max:100',
                 Rule::unique('meals')->ignore($meal->id)
-                    ->where('restaurant_id', $meal->restaurant_id)
+                    ->where('restaurant_id', $restaurant->id)
             ],
             'description' => 'nullable|max:500'
         ]);
@@ -110,7 +109,7 @@ class MealsController extends Controller
         try {
             $meal->fill([
                 'name' => $request->name,
-                'description' => $request->description,
+                'description' => $request->description
             ]);
 
             $meal->save();
@@ -130,6 +129,21 @@ class MealsController extends Controller
 
         try {
             $meal->delete();
+
+            return response(null, 204);
+        } catch (Exception $ex) {
+            Log::error($ex);
+
+            return response(trans('app.general.error'), 500);
+        }
+    }
+
+    public function destroyMany(Request $request,  Restaurant $restaurant) 
+    {
+        $this->authorize('deleteManyMeals', $restaurant);
+
+        try {
+            Meal::destroy($request->ids);
 
             return response(null, 204);
         } catch (Exception $ex) {
@@ -165,8 +179,8 @@ class MealsController extends Controller
             $meal->photo = "thumbnails/meals/$fileName";
             $meal->save();
 
-            if (!is_null($lastPath) && Storage::exists("public/{$meal->photo}")) {
-                Storage::delete("public/{$meal->photo}");
+            if (!is_null($lastPath) && Storage::exists("public/{$lastPath}")) {
+                Storage::delete("public/{$lastPath}");
             }
 
             return response()->json([

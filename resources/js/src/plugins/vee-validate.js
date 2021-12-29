@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { localize, extend } from 'vee-validate'
-import { required, email, min, alpha_dash, confirmed } from 'vee-validate/dist/rules';
+import { required, email, min, max, alpha_dash, confirmed } from 'vee-validate/dist/rules';
 
 extend('email', {
   ...email
@@ -12,6 +12,10 @@ extend('required', {
 
 extend('min', {
   ...min,
+});
+
+extend('max', {
+  ...max,
 });
 
 extend('alpha_dash', {
