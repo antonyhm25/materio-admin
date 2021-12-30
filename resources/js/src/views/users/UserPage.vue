@@ -151,7 +151,7 @@ export default {
         value: 'enable'
       },
       {
-        text: 'Fecha Registro',
+        text: 'Fecha de Registro',
         value: 'createdAt'
       }
     ],

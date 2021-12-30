@@ -56,7 +56,7 @@
         />
 
         <p class="text-sm mt-5">
-          Permitido JPG, GIF or PNG. tamaño maximo de 2MB
+          Permitido JPG, GIF o PNG. tamaño maximo de 2MB
         </p>
       </v-card-actions>
     </v-card>
@@ -109,6 +109,7 @@ export default {
         const data = await this.uploadPhoto(payload);
 
         this.localPhoto = `/storage/${data.path}`;
+        this.$store.commit('auth/UPDATE_PHOTO_RESTAURANT', this.localPhoto);
       }
     }
   }

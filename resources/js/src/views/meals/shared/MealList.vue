@@ -71,7 +71,7 @@ export default {
         value: 'description'
       },
       {
-        text: 'Fecha Registro',
+        text: 'Fecha de Registro',
         value: 'created_at'
       }
     ]

@@ -113,10 +113,14 @@ export default {
     }
   },
   async created() {
-    if (this.currentUser && this.currentUser.restaurant) {
-      await this.getRestaurantMeals(this.currentUser.restaurant.id)
+    if (this.$route.name === 'dashboard') {
+      if (this.auth.user.role === 'adminrestaurant') {
+        await this.getRestaurantMeals(this.auth.user.restaurant.id)
+      } else {
+        await this.getMeals()
+      }
     } else {
-      await this.getMeals()
+      await this.getRestaurantMeals(this.currentUser.restaurant.id)
     }
   }
 }

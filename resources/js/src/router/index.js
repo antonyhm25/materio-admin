@@ -129,7 +129,7 @@ const routes = [
   {
     path: '/account/view',
     name:'account-view',
-    component: () => import('@/views/users/UserView.vue'),
+    component: () => import('@/views/auth/MyAccount.vue'),
     meta: {
       auth: true,
       permission: 'account:view'

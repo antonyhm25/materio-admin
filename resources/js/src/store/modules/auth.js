@@ -53,8 +53,14 @@ const mutations = {
     state.user = user
   },
 
-  ['UPDATE_AVATAR'](state, avatar) {
-    state.user.avatar = avatar
+  ['UPDATE_PHOTO_RESTAURANT'](state, photo) {
+    if (state.user && state.user.restaurant) {
+      state.user.restaurant.photo = photo;
+
+      const localUser = JSON.parse(localStorage.getItem('userData'));
+      localUser.restaurant.photo = photo;
+      localStorage.setItem('userData', JSON.stringify(localUser));
+    }
   }
 }
 
@@ -88,6 +94,7 @@ const actions = {
     try {
       await authEndpoint.logout();
       commit('LOGOUT');
+      commit('user/SET_USER', null);
     } catch (error) {
       throw error;
     }

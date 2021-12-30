@@ -74,7 +74,6 @@ export default {
 
         this.$router.push({ name: 'module-meals-view', params: { id } })
       } catch (error) {
-        console.log(error);
         if (error.status === 422) {
           this.errors = getErrorFields(error.data);
         }

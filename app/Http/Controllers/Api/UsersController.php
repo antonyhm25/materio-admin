@@ -152,7 +152,12 @@ class UsersController extends Controller
         ]);
     
         try {
-            $user->fill($request->all());
+            $user->fill([
+                'first_name' => $request->firstName,
+                'last_name' => $request->lastName,
+                'full_name' => "{$request->firstName} {$request->lastName}",
+                'email' => $request->email
+            ]);
             $user->save();
 
             return response(null, 204);

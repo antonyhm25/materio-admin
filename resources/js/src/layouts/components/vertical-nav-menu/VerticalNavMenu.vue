@@ -35,7 +35,7 @@
       <nav-menu-section-title v-if="hasPermissions(['users:view', 'restaurants:view'])" title="ADMINISTRACIÓN"></nav-menu-section-title>
       <nav-menu-link v-if="hasPermissions(['users:view'])" title="Usuarios" :to="{ name: 'admin-users' }" :icon="icons.mdiAccountGroup"></nav-menu-link>
       <nav-menu-link v-if="hasPermissions(['restaurants:view'])" title="Restaurantes" :to="{ name: 'admin-restaurants' }" :icon="icons.mdiOfficeBuildingMarkerOutline"></nav-menu-link>
-      <nav-menu-link v-if="hasPermissions(['users:view'])" title="Usuarios Moviles" :to="{ name: 'admin-mobiles' }" :icon="icons.mdiAccountGroup"></nav-menu-link>
+      <nav-menu-link v-if="hasPermissions(['users:view'])" title="Usuarios Móviles" :to="{ name: 'admin-mobiles' }" :icon="icons.mdiAccountGroup"></nav-menu-link>
 
       <nav-menu-section-title title="CONFIGURACIÓN"></nav-menu-section-title>
       <nav-menu-link title="Mi Cuenta" :to="{ name: 'account-view' }" :icon="icons.mdiAccountCogOutline"></nav-menu-link>

@@ -85,7 +85,6 @@ export default {
           })
         }
       } catch (error) {
-        console.log(error);
         if (error.status === 422) {
           this.errors = getErrorFields(error.data);
         }

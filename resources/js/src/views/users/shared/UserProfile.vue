@@ -51,7 +51,7 @@
         <v-list-item class="px-0 mb-n2" dense>
           <v-list-item-content>
             <v-list-item-title>
-              <span class="font-weight-medium me-2">Role: </span>
+              <span class="font-weight-medium me-2">Rol: </span>
               <span class="text--secondary">{{ user.role }}</span>
             </v-list-item-title>
           </v-list-item-content>
