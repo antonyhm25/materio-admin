@@ -16,7 +16,7 @@
         cols="12"
         md="8"
       >
-        <v-card>
+        <v-card v-if="auth">
           <v-tabs v-model="tab" show-arrows>
             <v-tab  v-for="tab in tabs" :key="tab.id">
               <v-icon size="20" class="me-3">
@@ -52,7 +52,7 @@
   </div>
 </template>
 <script>
-import { mdiAccountOutline, mdiLockOpenOutline, mdiOfficeBuildingMarkerOutline  } from '@mdi/js'
+import { mdiAccountOutline, mdiLockOpenOutline } from '@mdi/js'
 import { mapActions, mapGetters } from 'vuex'
 
 import UserAccount from './shared/UserAccount.vue'
@@ -97,7 +97,7 @@ export default {
     ...mapActions('meal', ['getMeals'])
   },
   async created() {
-    await this.getUser(this.$route.params.id || this.auth.id);
+    await this.getUser(this.$route.params.id || (this.auth ? this.auth.id : 0));
 
     if (this.currentUser && this.currentUser.restaurant) {
       await  this.getMeals({ id: this.currentUser.restaurant.id, query: '' });
