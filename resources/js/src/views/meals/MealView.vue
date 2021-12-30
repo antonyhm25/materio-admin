@@ -14,10 +14,6 @@
         <v-card>
           <v-card-title>
             Platillo {{ currentMeal.name }}
-            <v-spacer></v-spacer>
-            <v-btn  color="primary">
-              Nueva Oferta
-            </v-btn>
           </v-card-title>
 
           <v-divider></v-divider>

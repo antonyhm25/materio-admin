@@ -21,6 +21,7 @@ class MealDealResult extends JsonResource
             'restaurant' => $this->meal->restaurant->name,
             'price' => $this->price,
             'newPrice' => $this->new_price,
+            'amount' => $this->amount,
             'available' => $this->available,
             'status' => $this->status,
             'mealId' => $this->meal_id,

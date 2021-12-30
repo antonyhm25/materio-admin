@@ -21,7 +21,7 @@
           class="app-logo me-3"
         ></v-img>
         <v-slide-x-transition>
-          <h2 class="app-title text--primary">MATERIO</h2>
+          <h2 class="app-title text--primary">Restaurant</h2>
         </v-slide-x-transition>
       </router-link>
     </div>
@@ -30,17 +30,13 @@
     <v-list expand shaped class="vertical-nav-menu-items pr-5">
       <nav-menu-link title="Dashboard" :to="{ name: 'dashboard' }" :icon="icons.mdiHomeOutline"></nav-menu-link>
       <nav-menu-link v-if="hasPermissions(['meals:create-update'])" title="Platillos" :to="{ name: 'module-meals' }" :icon="icons.mdiFood"></nav-menu-link>
+      <nav-menu-link v-if="hasPermissions(['meal-deals:create-update'])" title="Ofertas" :to="{ name: 'module-meal-deals' }" :icon="icons.mdiCurrencyUsd"></nav-menu-link>
+
       <nav-menu-section-title v-if="hasPermissions(['users:view', 'restaurants:view'])" title="ADMINISTRACIÓN"></nav-menu-section-title>
       <nav-menu-link v-if="hasPermissions(['users:view'])" title="Usuarios" :to="{ name: 'admin-users' }" :icon="icons.mdiAccountGroup"></nav-menu-link>
       <nav-menu-link v-if="hasPermissions(['restaurants:view'])" title="Restaurantes" :to="{ name: 'admin-restaurants' }" :icon="icons.mdiOfficeBuildingMarkerOutline"></nav-menu-link>
       <nav-menu-link v-if="hasPermissions(['users:view'])" title="Usuarios Moviles" :to="{ name: 'admin-mobiles' }" :icon="icons.mdiAccountGroup"></nav-menu-link>
 
-      <nav-menu-section-title title="SAMPLE"></nav-menu-section-title>
-      <nav-menu-link title="Typography" :to="{ name: 'typography' }" :icon="icons.mdiAlphaTBoxOutline"></nav-menu-link>
-      <nav-menu-link title="Icons" :to="{ name: 'icons' }" :icon="icons.mdiEyeOutline"></nav-menu-link>
-      <nav-menu-link title="Cards" :to="{ name: 'cards' }" :icon="icons.mdiCreditCardOutline"></nav-menu-link>
-      <nav-menu-link title="Tables" :to="{ name: 'simple-table' }" :icon="icons.mdiTable"></nav-menu-link>
-      <nav-menu-link title="Form Layouts" :to="{ name: 'form-layouts' }" :icon="icons.mdiFormSelect"></nav-menu-link>
       <nav-menu-section-title title="CONFIGURACIÓN"></nav-menu-section-title>
       <nav-menu-link title="Mi Cuenta" :to="{ name: 'account-view' }" :icon="icons.mdiAccountCogOutline"></nav-menu-link>
     </v-list>
@@ -60,7 +56,8 @@ import {
   mdiAccountCogOutline,
   mdiAccountGroup,
   mdiOfficeBuildingMarkerOutline,
-  mdiFood
+  mdiFood,
+  mdiCurrencyUsd
 } from '@mdi/js'
 
 import NavMenuSectionTitle from './components/NavMenuSectionTitle.vue'
@@ -93,7 +90,8 @@ export default {
         mdiAccountCogOutline,
         mdiAccountGroup,
         mdiOfficeBuildingMarkerOutline,
-        mdiFood
+        mdiFood,
+        mdiCurrencyUsd
       },
     }
   },

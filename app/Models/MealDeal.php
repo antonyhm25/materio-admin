@@ -15,7 +15,9 @@ class MealDeal extends Model
         'folio', 
         'price', 
         'new_price', 
-        'available', 
+        'available',
+        'available_time',
+        'amount', 
         'meal_id'
     ];
 

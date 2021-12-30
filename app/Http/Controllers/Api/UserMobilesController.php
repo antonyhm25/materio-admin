@@ -37,18 +37,25 @@ class UserMobilesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'firstName' => 'required',
+            'lastName' => 'required',
             'email' => 'required|unique:users|email',
             'password' => 'required|min:6|alpha_num',
             'repeatPassword' => 'required|same:password',
-            'enable' => 'required|in:0,1'
         ]);
     
         try {
             DB::beginTransaction();
 
-            $user = new User($request->all());
-            $user->password = bcrypt($request->password);
+            $user = new User([
+                'first_name' => $request->firstName,
+                'last_name' => $request->lastName,
+                'full_name' => "{$request->firstName} {$request->lastName}",
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+                'enable' => 1
+            ]);
+
             $user->type = 'local';
             $user->save();
             

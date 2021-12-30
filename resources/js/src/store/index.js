@@ -6,6 +6,7 @@ import RoleModule from './modules/role'
 import UserModule from './modules/user'
 import RestaurantModule from './modules/restaurant'
 import MealModule from './modules/meal'
+import MealDealModule from './modules/meal-deal'
 
 Vue.use(Vuex)
 
@@ -67,5 +68,6 @@ export default new Vuex.Store({
     user: UserModule,
     restaurant: RestaurantModule,
     meal: MealModule,
+    mealDeal: MealDealModule
   },
 })

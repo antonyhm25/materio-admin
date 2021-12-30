@@ -16,9 +16,11 @@ class CreateMealDealsTable extends Migration
         Schema::create('meal_deals', function (Blueprint $table) {
             $table->id();
             $table->string('folio')->unique();
+            $table->integer('amount');
             $table->decimal('price')->nullable()->default(0.0);
             $table->decimal('new_price')->nullable()->default(0.0);
             $table->timestamp('available')->nullable();
+            $table->time('available_time')->nullable();
             $table->enum('status', ['available', 'reserved', 'delivered'])->nullable()->default('available');
             $table->unsignedBigInteger('meal_id');
             $table->unsignedBigInteger('user_id')->nullable();

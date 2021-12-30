@@ -110,7 +110,7 @@ export default {
       default: () => false
     },
     mealPhoto: {
-      type: String,
+      type: [String, File],
       default: () => null
     }
   },

@@ -118,6 +118,15 @@ const routes = [
     }
   },
   {
+    path: '/meal-deals',
+    name:'module-meal-deals',
+    component: () => import('@/views/meal-deals/MealDealPage.vue'),
+    meta: {
+      auth: true,
+      permission: 'meal-deals:create-update'
+    }
+  },
+  {
     path: '/account/view',
     name:'account-view',
     component: () => import('@/views/users/UserView.vue'),
@@ -125,36 +134,6 @@ const routes = [
       auth: true,
       permission: 'account:view'
     }
-  },
-  {
-    path: '/typography',
-    name: 'typography',
-    component: () => import('@/views/typography/Typography.vue'),
-  },
-  {
-    path: '/icons',
-    name: 'icons',
-    component: () => import('@/views/icons/Icons.vue'),
-  },
-  {
-    path: '/cards',
-    name: 'cards',
-    component: () => import('@/views/cards/Card.vue'),
-  },
-  {
-    path: '/simple-table',
-    name: 'simple-table',
-    component: () => import('@/views/simple-table/SimpleTable.vue'),
-  },
-  {
-    path: '/form-layouts',
-    name: 'form-layouts',
-    component: () => import('@/views/form-layouts/FormLayouts.vue'),
-  },
-  {
-    path: '/pages/account-settings',
-    name: 'pages-account-settings',
-    component: () => import('@/views/auth/account-settings/AccountSettings.vue'),
   },
   {
     path: '/auth/login',
@@ -171,14 +150,6 @@ const routes = [
         next()
       }
     }
-  },
-  {
-    path: '/pages/register',
-    name: 'pages-register',
-    component: () => import('@/views/auth/Register.vue'),
-    meta: {
-      layout: 'blank',
-    },
   },
   {
     path: '/error-404',

@@ -1,5 +1,5 @@
 <template>
-  <div id="users-page">
+  <div id="meals-page">
     <v-card>
       <v-card-title>Platillos del restaurante {{ auth.restaurant.name }}</v-card-title>
 
@@ -8,7 +8,7 @@
       <v-card-text class="d-flex align-center flex-wrap">
         <v-text-field
           v-debounce:500="onSearch"
-          class="me-3 user-search"
+          class="me-3 mb-4 user-search"
           placeholder="Buscar"
           :prepend-inner-icon="icons.mdiFood"
           hide-details
@@ -20,7 +20,7 @@
 
         <div class="d-flex align-center flex-wrap">
           <v-btn
-            class="mr-2"
+            class="mb-4 mr-2"
             color="primary"
             :to="{ name: 'module-meals-create' }"
             depressed
@@ -36,6 +36,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
+                class="mb-4"
                 color="error"
                 v-bind="attrs"
                 v-on="on"
@@ -117,16 +118,25 @@
         <template v-slot:item.createdAt="{ item }">
           <span>{{ $date(item.creaAt).format('ll') }}</span>
         </template>
+
+        <template v-slot:item.actions="{ item }">
+           <meal-deal-create-dialog :meal="item" @on-save="" />
+        </template>
       </v-data-table>
     </v-card>
   </div>
 </template>
 <script>
-import { mdiFood, mdiAccountSearch, mdiDelete } from '@mdi/js'
+import { mdiFood, mdiAccountSearch, mdiDelete, mdiFormatListBulletedSquare } from '@mdi/js'
 import { mapActions, mapGetters } from 'vuex'
 import { toQueryParams } from '@/utils'
 
+import MealDealCreateDialog from './shared/MealDealCreateDialog.vue'
+
 export default {
+  components: {
+    MealDealCreateDialog
+  },
   data: () => ({
     itemsPerPage: 15,
     loading: true,
@@ -155,13 +165,19 @@ export default {
       {
         text: 'Fecha Registro',
         value: 'createdAt'
+      },
+      {
+        text: 'Acciones',
+        value: 'actions',
+        sortable: false
       }
     ],
 
     icons: {
       mdiFood,
       mdiAccountSearch,
-      mdiDelete
+      mdiDelete,
+      mdiFormatListBulletedSquare
     }
   }),
   watch: {
@@ -196,6 +212,14 @@ export default {
 
     canMealDeal() {
       return this.currentRows.length === 1
+    },
+
+    currrentMealDeal() {
+      if (this.currentRows.length === 1) {
+        return this.currentRows[0].id
+      }
+
+      return null
     }
   },
   methods: {

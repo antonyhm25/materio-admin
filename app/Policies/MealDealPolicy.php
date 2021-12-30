@@ -23,9 +23,7 @@ class MealDealPolicy
     public function viewAny(User $user)
     {
         if ($user->tokenCan(PermissionsType::MEAL_DEALS_VIEW)) {
-            if ($user->hasRole(RolesType::SUPER_ADMIN)) {
-                return true;
-            }
+           return true;
         }
 
         return Response::deny(trans('app.general.forbidden'));
@@ -99,9 +97,15 @@ class MealDealPolicy
     {
         if ($user->tokenCan(PermissionsType::MEAL_DEALS_DELETE)) {
             if (!is_null($user->restaurant)) {
-                return $user->restaurant->id === $mealDeal->meal->restaurant_id
-                    ? Response::allow()
-                    : Response::deny(trans('app.general.owner'));
+                if ($user->restaurant->id !== $mealDeal->meal->restaurant_id) {
+                    Response::deny(trans('app.general.owner'));
+                }
+
+                if (!is_null($mealDeal->user_id)) {
+                    return Response::deny(trans('app.meal-deals.taken'));;
+                }
+
+                return Response::allow();
             }
         }
 

@@ -21,7 +21,7 @@ class MealDealsController extends Controller
         $request->validate([
             'page' => 'sometimes|required|integer',
             'size' => 'sometimes|required|integer',
-            'sortBy' => 'sometimes|required|in:name,description,created_at',
+            'sortBy' => 'sometimes|required|in:meal,price,newPrice,amount,available,status',
             'order' => 'sometimes|required|in:asc,desc',
             'search' => 'sometimes|required',
             'address' => 'sometimes|required|string',
@@ -40,24 +40,32 @@ class MealDealsController extends Controller
 
             $query = MealDeal::select(
                 'meal_deals.id',
+                'meal_deals.folio',
                 'meal_deals.price',
                 'meal_deals.new_price as newPrice',
+                'meal_deals.amount',
                 'meal_deals.available',
+                'meal_deals.available_time as time',
                 'meal_deals.status',
                 'meal_deals.created_at as createdAt',
                 'meals.name as meal',
                 'meals.description',
+                'meals.photo',
                 'restaurants.id as restaurantId',
                 'restaurants.name as restaurant',
                 'restaurants.address as location',
+                'users.full_name as user'
             )
             ->join('meals', 'meals.id', '=', 'meal_deals.meal_id')
             ->join('restaurants', 'restaurants.id', '=', 'meals.restaurant_id')
+            ->leftJoin('users', 'meal_deals.user_id', '=', 'users.id')
             ->where('restaurants.id', $restaurant->id)
             ->orderBy($sortBy, $order);
 
             if (!is_null($search)) {
-                $query = $query->where('meals.name', 'like', "%$search%");
+                $query = $query
+                    ->where('meals.name', 'like', "%$search%")
+                    ->orWhere('meal_deals.folio', 'like', "%$search%");
             }
 
             if (!is_null($status)) {
@@ -69,10 +77,13 @@ class MealDealsController extends Controller
             }
 
             if (!is_null($expired)) {
-                if ($expired) {
-                    $query = $query->where('meal_deals.available', '<', now());
+                if ((int)$expired === 1) {
+                    $query = $query
+                        ->where('meal_deals.available', '<', now());
                 } else {
-                    $query = $query->where('meal_deals.available', '>', now());
+                    $query = $query
+                        ->where('meal_deals.available', '>', now())
+                        ->orWhereIn('meal_deals.status', ['reserved']);
                 }
             }
 
@@ -91,7 +102,7 @@ class MealDealsController extends Controller
         $request->validate([
             'page' => 'sometimes|required|integer',
             'size' => 'sometimes|required|integer',
-            'sortBy' => 'sometimes|required|in:name,description,created_at',
+            'sortBy' => 'sometimes|required|in:price,newPrice,available,restaurant',
             'order' => 'sometimes|required|in:asc,desc',
             'search' => 'sometimes|required',
             'restaurant' => 'sometimes|required|integer',
@@ -112,13 +123,17 @@ class MealDealsController extends Controller
 
             $query = MealDeal::select(
                 'meal_deals.id',
+                'meal_deals.folio',
                 'meal_deals.price',
                 'meal_deals.new_price as newPrice',
+                'meal_deals.amount',
                 'meal_deals.available',
+                'meal_deals.available_time as time',
                 'meal_deals.status',
                 'meal_deals.created_at as createdAt',
                 'meals.name as meal',
                 'meals.description',
+                'meals.photo',
                 'restaurants.id as restaurantId',
                 'restaurants.name as restaurant',
                 'restaurants.address as location',
@@ -180,7 +195,9 @@ class MealDealsController extends Controller
         $request->validate([
             'price' => 'nullable|numeric',
             'newPrice' => 'nullable|numeric',
+            'amount' => 'nullable|integer',
             'available' => 'required|date',
+            'time' => 'required|string',
             'mealId' => 'required|integer|exists:meals,id'
         ]);
 
@@ -191,7 +208,9 @@ class MealDealsController extends Controller
                 'folio' => $folios[1] .'-'. $folios[2],
                 'price' => $request->price,
                 'new_price' => $request->newPrice ?? 0.0,
+                'amount' => $request->amount,
                 'available' => $request->available,
+                'available_time' => $request->time,
                 'status' => 'available',
                 'meal_id' => $request->mealId
             ]);
@@ -212,8 +231,10 @@ class MealDealsController extends Controller
         $request->validate([
             'price' => 'nullable|numeric',
             'newPrice' => 'nullable|numeric',
+            'amount' => 'nullable|integer',
             'available' => 'required|date',
-            'status' => 'required|in:available,reserved,delivered'
+            'time' => 'required|string',
+            'status' => 'sometimes|required|in:delivered'
         ]);
 
         try {
@@ -221,8 +242,12 @@ class MealDealsController extends Controller
                 'price' => $request->price,
                 'new_price' => $request->newPrice ?? 0.0,
                 'available' => $request->available,
-                'status' => $request->status
+                'available_time' => $request->time
             ]);
+
+            if ($request->status) {
+                $meal->status = $request->status;
+            }
 
             $meal->save();
 
