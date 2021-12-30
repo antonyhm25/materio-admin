@@ -18,7 +18,7 @@
       >
         <v-card v-if="currentUser.restaurant" class="mb-7">
           <v-divider></v-divider>
-          <dashboard-meals :id-restaurant="currentUser.restaurant.id" />
+          <dashboard-meals />
         </v-card>
 
         <v-card v-if="auth">

@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="align-start">
-      <span class="font-weight-semibold">Estadistica del Restaurante</span>
+      <span class="font-weight-semibold">{{ title }}</span>
     </v-card-title>
 
     <v-card-subtitle class="mb-8 mt-n5">
@@ -81,13 +81,18 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   props: {
-    idRestaurant: {
-      type: Number,
-      required: true
+    title: {
+      type: String,
+      default: () => 'Estadistica del Restaurante'
     }
   },
   computed: {
     ...mapGetters('dashboard', ['restaurantMeals']),
+    ...mapGetters('user', ['currentUser']),
+
+    auth() {
+      return this.$store.state.auth
+    },
 
     statisticsData() {
       return this.restaurantMeals.types.map(e => {
@@ -96,7 +101,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('dashboard', ['getRestaurantMeals']),
+    ...mapActions('dashboard', ['getRestaurantMeals', 'getMeals']),
 
     resolveStatisticsIconVariation(data) {
       if (data === 'Platillos') return { icon: mdiFood, color: 'primary' }
@@ -108,7 +113,11 @@ export default {
     }
   },
   async created() {
-    await this.getRestaurantMeals(this.idRestaurant)
+    if (this.currentUser && this.currentUser.restaurant) {
+      await this.getRestaurantMeals(this.currentUser.restaurant.id)
+    } else {
+      await this.getMeals()
+    }
   }
 }
 </script>

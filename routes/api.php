@@ -74,5 +74,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/meal-deals', [MealDealsController::class, 'mealDeals']);
     Route::put('/meal-deals/{meal}/reserved', [MealDealsController::class, 'reserved']);
 
-    Route::get('/dashboards/{restaurant}/restaurants', [DashboardsController::class, 'restaurantMeals']);
+    Route::get('/dashboards/{restaurant}/meals', [DashboardsController::class, 'restaurantMeals']);
+    Route::get('/dashboards/meals', [DashboardsController::class, 'meals']);
 });

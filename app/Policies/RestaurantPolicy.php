@@ -21,7 +21,11 @@ class RestaurantPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        if ($user->tokenCan(PermissionsType::MEALS_VIEW)) {
+            if ($user->hasRole(RolesType::SUPER_ADMIN)) {
+                return true;
+            }
+        }
     }
 
     /**

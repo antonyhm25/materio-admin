@@ -49,6 +49,25 @@ const actions = {
       throw error;
     }
   },
+
+  async getMeals({ commit }) {
+    commit(SET_RESTAURANT_MEALS, {
+      meals: 0,
+      types: [
+        { status: 'available', total: 0 },
+        { status: 'reserved', total: 0 },
+        { status: 'delivered', total: 0 },
+      ]
+    });
+
+    try {
+      const data = await dashboardsEndpoint.meals();
+
+      commit(SET_RESTAURANT_MEALS, data);
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default {

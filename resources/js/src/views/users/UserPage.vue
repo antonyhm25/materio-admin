@@ -240,6 +240,9 @@ export default {
     getColor (enable) {
       return enable === 1 ? 'success' : 'error';
     },
+  },
+  created() {
+    this.$store.commit('user/SET_USER', null)
   }
 }
 </script>
