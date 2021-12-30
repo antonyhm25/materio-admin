@@ -203,7 +203,7 @@ export default {
             newPrice: this.mealDeal.newPrice,
             amount: this.mealDeal.amount,
             status: 'available',
-            available: `${this.$date().format('YYYY-M-D')} ${this.time}`,
+            available: `${this.$date().format('YYYY-M-D')} ${this.mealDeal.time}`,
             time: this.mealDeal.time,
             mealId: this.meal.id
           };

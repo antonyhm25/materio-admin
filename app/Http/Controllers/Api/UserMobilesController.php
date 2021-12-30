@@ -77,20 +77,23 @@ class UserMobilesController extends Controller
         $this->authorize('update', $user);
 
         $request->validate([
-            'name' => 'required',
+            'firstName' => 'required',
+            'lastName' => 'required',
             'email' => [
                 'required',
                 Rule::unique('users')->ignore($user->id), 
                 'email',
-            ], 
-            'enable' => 'required|in:0,1',
+            ]
         ]);
     
         try {
-            $user->fill($request->all());
+            $user->fill([
+                'first_name' => $request->firstName,
+                'last_name' => $request->lastName,
+                'full_name' => "{$request->firstName} {$request->lastName}",
+                'email' => $request->email
+            ]);
             $user->save();
-        
-            $user->assignRole($request->role);
 
             return response(null, 204);
         } catch (Exception $ex) {

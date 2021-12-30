@@ -45,7 +45,7 @@
         <v-card v-if="currentUser.restaurant" class="mt-7">
           <v-card-title>Platillos</v-card-title>
           <v-divider></v-divider>
-          <meal-list :loading="isMealsLoading" :items="meals" :total-items="totalItems" />
+          <meal-list />
         </v-card>
       </v-col>
     </v-row>
@@ -77,7 +77,6 @@ export default {
   },
   data: () => ({
     tab: null,
-    isMealsLoading: true,
 
     tabs: [
       { id: 1, title: 'Mi Cuenta', icon: mdiAccountOutline },
@@ -86,7 +85,6 @@ export default {
   }),
   computed: {
     ...mapGetters('user', ['currentUser']),
-    ...mapGetters('meal', ['meals', 'totalItems']),
 
     auth() {
       return this.$store.state.auth.user;
@@ -94,15 +92,9 @@ export default {
   },
   methods: {
     ...mapActions('user', ['getUser']),
-    ...mapActions('meal', ['getMeals'])
   },
   async created() {
     await this.getUser(this.$route.params.id || (this.auth ? this.auth.id : 0));
-
-    if (this.currentUser && this.currentUser.restaurant) {
-      await  this.getMeals({ id: this.currentUser.restaurant.id, query: '' });
-      this.isMealsLoading = false;
-    }
   }
 }
 </script>

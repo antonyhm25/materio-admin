@@ -2,16 +2,14 @@
   <div id="meal-list">
     <v-data-table
       item-key="name"
-      v-model="currentRows"
       :headers="headers"
-      :items="items"
+      :items="meals"
       :options.sync="options"
       :server-items-length="totalItems"
       :loading="loading"
       :footer-props="{
-        itemsPerPageOptions: [15, 30, 50, 100]
+        itemsPerPageOptions: [10, 20, 30]
       }"
-      show-select
     >
       <template v-slot:item.name="{ item }">
         <div class="d-flex align-center">
@@ -46,31 +44,17 @@
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+import { toQueryParams } from '@/utils'
+
 export default {
-  props: {
-    items: {
-      type: Array,
-      default: () => []
-    },
-    totalItems: {
-      type: Number,
-      default: () => 0
-    },
-    loading: {
-      type: Boolean,
-      default: () => true
-    },
-    itemsPerPage: {
-      type: Number,
-      default: () => 15
-    }
-  },
   data: () => ({
-    currentRows: [],
+    loading: false,
+    itemsPerPage: 10,
 
     options: {
-      sortBy: ['name'],
-      sortDesc: [false]
+      sortBy: ['createdAt'],
+      sortDesc: [true]
     },
 
     headers: [
@@ -93,17 +77,51 @@ export default {
     ]
   }),
   watch: {
-    currentRows(val) {
-      this.$emit('on-selected-rows', val)
+    options: {
+      handler() {
+        this.paginate()
+      },
+      deep: true
     }
   },
   computed: {
+    ...mapGetters('user', ['currentUser']),
+    ...mapGetters('meal', ['meals', 'totalItems']),
+
     photo() {
       return (photo) => {
         if (!photo) return  require('@/assets/images/avatars/no-food.png').default;
         return photo;
       }
     }
+  },
+  methods: {
+    ...mapActions('meal', ['getMeals']),
+
+    async paginate(search = null) {
+      const {
+        sortBy,
+        sortDesc,
+        page,
+        itemsPerPage
+      } = this.options;
+
+      let order = null;
+      if (sortDesc[0]) {
+        order = sortDesc[0] === true ? 'desc' : 'asc';
+      }
+
+      const query = toQueryParams({
+        sortBy: sortBy[0] || 'createdAt',
+        order: order || 'desc',
+        size: itemsPerPage,
+        search,
+        page
+      })
+
+      await  this.getMeals({ id: this.currentUser.restaurant.id, query });
+      this.loading = false;
+    },
   }
 }
 </script>
