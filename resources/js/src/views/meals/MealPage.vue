@@ -115,8 +115,8 @@
           </span>
         </template>
 
-        <template v-slot:item.createdAt="{ item }">
-          <span>{{ $date(item.creaAt).format('ll') }}</span>
+        <template v-slot:item.created_at="{ item }">
+          <span>{{ $date(item.created_at).format('ll') }}</span>
         </template>
 
         <template v-slot:item.actions="{ item }">
@@ -164,7 +164,7 @@ export default {
       },
       {
         text: 'Fecha Registro',
-        value: 'createdAt'
+        value: 'created_at'
       },
       {
         text: 'Acciones',

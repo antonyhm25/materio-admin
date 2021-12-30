@@ -1,6 +1,6 @@
 <template>
   <div id="user-view">
-    <v-row>
+    <v-row  v-if="currentUser">
       <v-col
         cols="12"
         md="4"
@@ -16,6 +16,11 @@
         cols="12"
         md="8"
       >
+        <v-card v-if="currentUser.restaurant" class="mb-7">
+          <v-divider></v-divider>
+          <dashboard-meals :id-restaurant="currentUser.restaurant.id" />
+        </v-card>
+
         <v-card v-if="auth">
           <v-tabs v-model="tab" show-arrows>
             <v-tab  v-for="tab in tabs" :key="tab.id">
@@ -43,6 +48,12 @@
         </v-card>
 
         <v-card v-if="currentUser.restaurant" class="mt-7">
+          <v-card-title>Ofertas Vigentes</v-card-title>
+          <v-divider></v-divider>
+          <meal-deal-list />
+        </v-card>
+
+        <v-card v-if="currentUser.restaurant" class="mt-7">
           <v-card-title>Platillos</v-card-title>
           <v-divider></v-divider>
           <meal-list />
@@ -63,6 +74,8 @@ import UserPermission from './shared/UserPermission.vue'
 
 import RestaurantProfile from '@/views/restaurants/shared/RestaurantProfile.vue'
 import MealList from '@/views/meals/shared/MealList.vue'
+import MealDealList from '@/views/meal-deals/shared/MealDealList.vue'
+import DashboardMeals from '@/views/restaurants/shared/DashboardMeals.vue'
 
 export default {
   components: {
@@ -73,7 +86,9 @@ export default {
     UserPermission,
 
     RestaurantProfile,
-    MealList
+    MealList,
+    MealDealList,
+    DashboardMeals
   },
   data: () => ({
     tab: null,

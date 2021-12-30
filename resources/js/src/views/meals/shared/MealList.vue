@@ -37,8 +37,8 @@
         </span>
       </template>
 
-      <template v-slot:item.createdAt="{ item }">
-        <span>{{ $date(item.creaAt).format('ll') }}</span>
+      <template v-slot:item.created_at="{ item }">
+        <span>{{ $date(item.created_at).format('ll') }}</span>
       </template>
     </v-data-table>
   </div>
@@ -53,7 +53,7 @@ export default {
     itemsPerPage: 10,
 
     options: {
-      sortBy: ['createdAt'],
+      sortBy: ['created_at'],
       sortDesc: [true]
     },
 
@@ -72,7 +72,7 @@ export default {
       },
       {
         text: 'Fecha Registro',
-        value: 'createdAt'
+        value: 'created_at'
       }
     ]
   }),
@@ -112,7 +112,7 @@ export default {
       }
 
       const query = toQueryParams({
-        sortBy: sortBy[0] || 'createdAt',
+        sortBy: sortBy[0] || 'created_at',
         order: order || 'desc',
         size: itemsPerPage,
         search,

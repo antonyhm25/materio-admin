@@ -1,5 +1,13 @@
 <template>
-  <v-row>
+  <v-row v-if="role === 'adminrestaurant'">
+    <v-col cols="12">
+      <v-card class="mb-7">
+        <v-divider></v-divider>
+        <dashboard-meals :id-restaurant="auth.user.restaurant.id" />
+      </v-card>
+    </v-col>
+  </v-row>
+  <v-row v-else>
     <v-col
       cols="12"
       md="4"
@@ -121,6 +129,7 @@ import DashboardCardDepositAndWithdraw from './DashboardCardDepositAndWithdraw.v
 import DashboardCardSalesByCountries from './DashboardCardSalesByCountries.vue'
 import DashboardWeeklyOverview from './DashboardWeeklyOverview.vue'
 import DashboardDatatable from './DashboardDatatable.vue'
+import DashboardMeals from '@/views/restaurants/shared/DashboardMeals.vue';
 
 export default {
   components: {
@@ -132,6 +141,19 @@ export default {
     DashboardCardSalesByCountries,
     DashboardWeeklyOverview,
     DashboardDatatable,
+
+    DashboardMeals
+  },
+  computed: {
+    auth() {
+      return this.$store.state.auth
+    },
+    role() {
+      if (this.auth && this.auth.user) {
+        return this.auth.user.role
+      }
+      return ''
+    }
   },
   setup() {
     const totalProfit = {

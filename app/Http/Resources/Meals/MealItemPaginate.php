@@ -20,7 +20,7 @@ class MealItemPaginate extends JsonResource
             'photo' => is_null($this->photo) ? null : "/storage/{$this->photo}",
             'description' => $this->description,
             'restaurant' => $this->restaurant->name,
-            'createdAt' => $this->created_at,
+            'created_at' => $this->created_at,
         ];
     }
 }

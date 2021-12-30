@@ -3,6 +3,7 @@
 use App\Helpers\PermissionsType;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DashboardsController;
 use App\Http\Controllers\Api\MealsController;
 use App\Http\Controllers\Api\RolesController;
 use App\Http\Controllers\Api\UsersController;
@@ -71,5 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/restaurants/{restaurant}/meal-deals/{meal}', [MealDealsController::class, 'destroy']);
 
     Route::get('/meal-deals', [MealDealsController::class, 'mealDeals']);
-    Route::put('/meal-deals/{meal}/reserved', [MealDealsController::class, 'reserved'])->middleware('permission:'. PermissionsType::MEAL_DEALS_STATUS);
+    Route::put('/meal-deals/{meal}/reserved', [MealDealsController::class, 'reserved']);
+
+    Route::get('/dashboards/{restaurant}/restaurants', [DashboardsController::class, 'restaurantMeals']);
 });
