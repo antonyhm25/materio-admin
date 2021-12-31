@@ -62,7 +62,7 @@
           </v-avatar>
           <div class="ms-3">
             <p class="text-xs mb-0">
-              {{ data.title }}
+              {{ statusText(data.title) }}
             </p>
             <h3 class="text-xl font-weight-semibold">
               {{ data.total }}
@@ -83,7 +83,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: () => 'Estadistica del Restaurante'
+      default: () => 'Oferta de Platillos'
     }
   },
   computed: {
@@ -98,6 +98,18 @@ export default {
       return this.restaurantMeals.types.map(e => {
         return { title: e.status, total: e.total }
       })
+    },
+
+    statusText() {
+      return (status) => {
+        if (status === 'available') {
+          return 'disponible';
+        } else if (status === 'reserved') {
+          return 'reservado';
+        } else {
+          return 'entregado';
+        }
+      }
     }
   },
   methods: {
